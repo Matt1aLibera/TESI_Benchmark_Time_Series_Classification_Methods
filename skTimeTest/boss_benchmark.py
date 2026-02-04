@@ -11,7 +11,6 @@ def run_boss_benchmark(dataset_name: str, data: Dict[str, Any], seed: int,
     
     X_train, y_train = data['X_train'], data['y_train']
     X_test, y_test = data['X_test'], data['y_test']
-    series_len = X_train.shape[-1]
     # --- LOGICA ADATTIVA (COMMENTATA PER TEST FULL DEFAULT) ---
     # if hasattr(X_train, "iloc"):
     #     series_len = len(X_train.iloc[0, 0])
@@ -28,6 +27,7 @@ def run_boss_benchmark(dataset_name: str, data: Dict[str, Any], seed: int,
 
     # Estrazione parametri con i default originali di sktime
     # 1. Prendi i parametri richiesti dal main
+    series_len = data['series_length']
     requested_min_win = kwargs.get("min_window", 10)
     requested_max_prop = kwargs.get("max_win_len_prop", 1.0)
     
@@ -48,7 +48,7 @@ def run_boss_benchmark(dataset_name: str, data: Dict[str, Any], seed: int,
         threshold=kwargs.get("threshold", 0.92),
         max_ensemble_size=kwargs.get("max_ensemble_size", 500),
         min_window=calc_min_window,
-        max_win_len_prop=effective_max_win,
+        max_win_len_prop=requested_max_prop,
         random_state=seed,
         n_jobs=1
     )

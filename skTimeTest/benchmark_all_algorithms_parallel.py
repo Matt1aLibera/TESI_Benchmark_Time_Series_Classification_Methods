@@ -39,7 +39,7 @@ DATASET_NAMES: List[str] = [
     #"Rock",
     #"SmoothSubspace",#
 ]
-#ROCKET_NAME, WEASEL_NAME, RIC_RF_NAME, BOSS_NAME, DRCIF_NAME, STC_NAME, ARSENAL_NAME, HC2_NAME, RESNET_NAME,INCEPTION_NAME
+
 ALGORITHMS_TO_RUN = [
     {
         "name": ROCKET_NAME, 
@@ -71,23 +71,23 @@ ALGORITHMS_TO_RUN = [
         "variant": "Arsenal_Super_Lite", 
         "params": {"n_estimators": 5, "num_kernels": 500} # Veloce, per test
     },
-    #{
-    #    "name": BOSS_NAME, 
-    #    "variant": "BOSS_Standard", 
-    #    "params": {
-    #        "max_ensemble_size": 500,
-    #        "feature_selection": "none", # Come da documentazione standard
-    #        "threshold": 0.92}
-    #},
-    #{
-    #    "name": BOSS_NAME, 
-    #    "variant": "BOSS_Lite", 
-    #    "params": {
-    #        "max_ensemble_size": 50,
-    #        "feature_selection": "chi2", # Molto più veloce e meno RAM
-    #        "threshold": 0.95,
-    #        "min_window": 20}
-    #},
+    {
+        "name": BOSS_NAME, 
+        "variant": "BOSS_Standard", 
+        "params": {
+            "max_ensemble_size": 500,
+            "feature_selection": "none", # Come da documentazione standard
+            "threshold": 0.92}
+    },
+    {
+        "name": BOSS_NAME, 
+        "variant": "BOSS_Lite", 
+        "params": {
+            "max_ensemble_size": 50,
+            "feature_selection": "chi2", # Molto più veloce e meno RAM
+            "threshold": 0.95,
+            "min_window": 20}
+    },
     {
         "name": BOSS_NAME, 
         "variant": "BOSS_Super_Lite", 
@@ -112,34 +112,34 @@ ALGORITHMS_TO_RUN = [
         "variant": "DrCIF_Super_Light", 
         "params": {"n_estimators": 10, "att_subsample_size": 3, "n_intervals": 2}
     },
+    #{
+    #    "name": HC2_NAME, 
+    #    "variant": "HC2_Standard", 
+    #    "params": {
+    #        "stc_params": {"n_shapelet_samples": 10000, "max_shapelets": None},
+    #        "drcif_params": {"n_estimators": 200, "att_subsample_size": 10},
+    #        "arsenal_params": {"num_kernels": 2000, "n_estimators": 25},
+    #        "tde_params": {"n_parameter_samples": 250, "max_ensemble_size": 50}
+    #    }
+    #},
+    #{
+    #    "name": HC2_NAME, 
+    #    "variant": "HC2_Lite", 
+    #    "params": {
+    #        "stc_params": {"n_shapelet_samples": 1000, "max_shapelets": 200},
+    #        "drcif_params": {"n_estimators": 50, "att_subsample_size": 5, "n_intervals": 4},
+    #        "arsenal_params": {"num_kernels": 1000, "n_estimators": 10},
+    #        "tde_params": {"n_parameter_samples": 100, "max_ensemble_size": 10}
+    #    }
+    #},
     {
         "name": HC2_NAME, 
-        "variant": "Standard", 
+        "variant": "HC2_Super_Lite", 
         "params": {
-            "stc_params": {"n_shapelet_samples": 10000, "n_estimators": 200, "max_shapelets": None},
-            "drcif_params": {"n_estimators": 500, "n_intervals": None, "att_subsample_size": 10},
-            "arsenal_params": {"num_kernels": 2000, "n_estimators": 25},
-            "tde_params": {"n_parameter_samples": 250, "max_ensemble_size": 50}
-        }
-    },
-    {
-        "name": HC2_NAME, 
-        "variant": "Lite_10x", 
-        "params": {
-            "stc_params": {"n_shapelet_samples": 1000, "n_estimators": 50, "max_shapelets": 200},
-            "drcif_params": {"n_estimators": 50, "n_intervals": 20},
-            "arsenal_params": {"num_kernels": 1000, "n_estimators": 5},
-            "tde_params": {"n_parameter_samples": 50, "max_ensemble_size": 10}
-        }
-    },
-    {
-        "name": HC2_NAME, 
-        "variant": "UltraLite_100x", 
-        "params": {
-            "stc_params": {"n_shapelet_samples": 100, "n_estimators": 10, "max_shapelets": 50},
-            "drcif_params": {"n_estimators": 10, "n_intervals": 10},
-            "arsenal_params": {"num_kernels": 250, "n_estimators": 2},
-            "tde_params": {"n_parameter_samples": 10, "max_ensemble_size": 5}
+            "stc_params": {"n_shapelet_samples": 100, "max_shapelets": 50},
+            "drcif_params": {"n_estimators": 10, "att_subsample_size": 3, "n_intervals": 2},
+            "arsenal_params": {"num_kernels": 500, "n_estimators": 5},
+            "tde_params": {"n_parameter_samples": 51, "max_ensemble_size": 5}
         }
     },
     #{
@@ -350,18 +350,19 @@ if __name__ == "__main__":
     # Questo salva ogni singola riga (ogni seed) con tutte le colonne nuove
     final_df.to_csv("benchmark_results_detailed.csv", index=False)
 
-   # --- 3. LOGICA DEL RIASSUNTO (Tabella a video) ---
-    metadata_cols = ['dataset', 'train_size', 'series_length', 'num_classes']
-    metadata_df = final_df[metadata_cols].drop_duplicates().set_index('dataset')
+    # --- 3. LOGICA DEL RIASSUNTO ---
+    metrics_to_agg = ['accuracy', 'f1_score', 'fit_time', 'predict_time', 'total_time_seconds']
+
+    # Invece di drop_duplicates generico, raggruppiamo per dataset 
+    # e prendiamo il valore massimo (o il primo) per ogni metadato.
+    # Questo garantisce UNA riga per dataset.
+    metadata_df = final_df.groupby('dataset')[['train_size', 'series_length', 'num_classes']].max()
 
     # Calcoliamo medie e deviazioni standard
-    metrics_to_agg = ['accuracy', 'f1_score', 'fit_time', 'predict_time', 'total_time_seconds']
     performance_summary = final_df.groupby(['dataset', 'variant'])[metrics_to_agg].agg(['mean', 'std'])
-    
-    # Pulizia nomi colonne (crea accuracy_mean, accuracy_std, ecc.)
     performance_summary.columns = ['_'.join(col).strip() for col in performance_summary.columns.values]
-    
-    # Uniamo i metadati del dataset
+
+    # Uniamo: ora il join sarà 1-a-1 per ogni coppia (dataset, variant)
     final_summary_combined = performance_summary.reset_index(level='variant').join(metadata_df)
 
     # Definiamo l'ordine delle colonne includendo TUTTE le medie e le deviazioni standard
