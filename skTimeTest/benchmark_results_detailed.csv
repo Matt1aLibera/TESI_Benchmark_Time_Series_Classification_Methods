@@ -1,0 +1,4 @@
+dataset,algorithm,variant,seed,hyperparameters,accuracy,f1_score,fit_time,predict_time,total_time_seconds,train_size,series_length,num_classes
+Chinatown,InceptionTime,Inception_Fast,0,"{""n_epochs"": 1000, ""batch_size"": 32}",0.9883381924198251,0.9855347503373819,33.205079555511475,0.39501285552978516,33.60009241104126,20,24,2
+Chinatown,InceptionTime,Inception_Fast,1,"{""n_epochs"": 1000, ""batch_size"": 32}",0.9854227405247813,0.981975638209545,32.58631777763367,0.39971232414245605,32.98603010177612,20,24,2
+Chinatown,InceptionTime,Inception_Fast,2,"{""n_epochs"": 1000, ""batch_size"": 32}",0.9854227405247813,0.981975638209545,32.34099841117859,0.3906583786010742,32.73165678977966,20,24,2
