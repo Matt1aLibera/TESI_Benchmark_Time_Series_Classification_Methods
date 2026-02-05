@@ -46,7 +46,7 @@ def run_weasel_benchmark(dataset_name: str, data: Dict[str, Any], seed: int,
     # Previsione (Predict)
     start_pred = time.time()
     y_pred = classifier.predict(X_test)
-    predict_time = start_pred_time = time.time() - start_pred
+    predict_time = time.time() - start_pred
 
     # Salvataggio parametri reali usati
     actual_params = kwargs.copy()

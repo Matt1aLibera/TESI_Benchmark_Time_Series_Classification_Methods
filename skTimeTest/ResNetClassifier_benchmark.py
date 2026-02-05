@@ -4,6 +4,7 @@ import numpy as np
 from sktime.classification.deep_learning.resnet import ResNetClassifier
 from sklearn.metrics import accuracy_score, f1_score
 from typing import Dict, Any
+import tensorflow as tf
 
 ALGO_NAME: str = "ResNet"
 
@@ -36,6 +37,8 @@ def run_resnet_benchmark(dataset_name: str, data: Dict[str, Any], seed: int,
     start_pred = time.time()
     y_pred = classifier.predict(X_test)
     predict_time = time.time() - start_pred
+    # PULIZIA FINALE: Libera la memoria del grafo di TensorFlow
+    tf.keras.backend.clear_session()
 
     return {
         "dataset": dataset_name,

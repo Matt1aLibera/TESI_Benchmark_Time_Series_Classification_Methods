@@ -31,18 +31,14 @@ def run_rocket_benchmark(dataset_name: str, data: Dict[str, Any], seed: int,
     y_pred = classifier.predict(X_test)
     predict_time = time.time() - start_pred
 
-    # Calcolo Metriche
-    accuracy = accuracy_score(y_test, y_pred)
-    f1_macro = f1_score(y_test, y_pred, average='macro', zero_division=0)
-
     return {
         "dataset": dataset_name,
         "algorithm": ALGO_NAME,
         "variant": variant,
         "seed": seed,
         "hyperparameters": json.dumps(kwargs), # Salva i parametri usati
-        "accuracy": accuracy,
-        "f1_score": f1_macro,
+        "accuracy": accuracy_score(y_test, y_pred),
+        "f1_score": f1_score(y_test, y_pred, average='macro', zero_division=0),
         "fit_time": fit_time,
         "predict_time": predict_time,
         "total_time_seconds": fit_time + predict_time,

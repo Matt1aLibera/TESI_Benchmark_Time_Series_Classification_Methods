@@ -192,11 +192,11 @@ ALGORITHMS_TO_RUN = [
         "variant": "WEASEL_Super_Lite", 
         "params": {"window_inc": 12, "p_threshold": 0.001} 
     },
-    #{
-    #    "name": INCEPTION_NAME, 
-    #    "variant": "Inception_Standard", 
-    #    "params": {"n_epochs": 1500, "batch_size": 64} 
-    #},
+    {
+        "name": INCEPTION_NAME, 
+        "variant": "Inception_Standard", 
+        "params": {"n_epochs": 1500, "batch_size": 64} 
+    },
     #{
     #    "name": INCEPTION_NAME, 
     #    "variant": "Inception_Lite", 
@@ -209,11 +209,11 @@ ALGORITHMS_TO_RUN = [
                    "kernel_size":10, "n_filters":8
                    } 
     },
-    #{
-    #    "name": RESNET_NAME, 
-    #    "variant": "ResNet_Standard", 
-    #    "params": {"n_epochs": 1500, "batch_size": 16} 
-    #},
+    {
+        "name": RESNET_NAME, 
+        "variant": "ResNet_Standard", 
+        "params": {"n_epochs": 1500, "batch_size": 16} 
+    },
     #{
     #    "name": RESNET_NAME, 
     #    "variant": "ResNet_Lite", 
