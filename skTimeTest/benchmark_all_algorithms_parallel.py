@@ -26,18 +26,18 @@ SEEDS: List[int] = [0, 1, 2]
 
 # Lista dei dataset (puoi decommentare quelli che vuoi far girare stanotte)
 DATASET_NAMES: List[str] = [
-    #"Crop",
+    "Crop",
     "Chinatown",
-    #"DiatomSizeReduction",
-    #"ElectricDevices",
-    #"FordB",
-    #"Fungi",
-    #"HandOutlines",
-    #"HouseTwenty",
-    #"InsectEPGSmallTrain",
-    #"ItalyPowerDemand",
-    #"Rock",
-    #"SmoothSubspace",#
+    "DiatomSizeReduction",
+    "ElectricDevices",
+    "FordB",
+    "Fungi",
+    "HandOutlines",
+    "HouseTwenty",
+    "InsectEPGSmallTrain",
+    "ItalyPowerDemand",
+    "Rock",
+    "SmoothSubspace",#
 ]
 
 ALGORITHMS_TO_RUN = [
@@ -46,48 +46,48 @@ ALGORITHMS_TO_RUN = [
         "variant": "ROCKET_Super_Lite",
         "params": {"num_kernels": 1000}
     },
-    #
-    #    "name": ROCKET_NAME, 
-    #    "variant": "ROCKET_Lite", 
-    #    "params": {"num_kernels": 5000}
-    #},
-    #{
-    #    "name": ROCKET_NAME, 
-    #    "variant": "ROCKET_Standard", 
-    #    "params": {"num_kernels": 10000}
-    #},
-    #{
-    #    "name": ARSENAL_NAME, 
-    #    "variant": "Arsenal_Standard", 
-    #    "params": {"n_estimators": 25, "num_kernels": 2000} # Veloce, per test
-    #},
-    #{
-    #    "name": ARSENAL_NAME, 
-    #    "variant": "Arsenal_Lite", 
-    #    "params": {"n_estimators": 10, "num_kernels": 1000} # Veloce, per test
-    #},
+    {
+        "name": ROCKET_NAME,
+        "variant": "ROCKET_Lite",
+        "params": {"num_kernels": 5000}
+    },
+    {
+        "name": ROCKET_NAME,
+        "variant": "ROCKET_Standard",
+        "params": {"num_kernels": 10000}
+    },
+    {
+        "name": ARSENAL_NAME,
+        "variant": "Arsenal_Standard",
+        "params": {"n_estimators": 25, "num_kernels": 2000} # Veloce, per test
+    },
+    {
+        "name": ARSENAL_NAME,
+        "variant": "Arsenal_Lite",
+        "params": {"n_estimators": 10, "num_kernels": 1000} # Veloce, per test
+    },
     {
         "name": ARSENAL_NAME,
         "variant": "Arsenal_Super_Lite",
         "params": {"n_estimators": 5, "num_kernels": 500} # Veloce, per test
     },
-    #{
-    #    "name": BOSS_NAME,
-    #    "variant": "BOSS_Standard",
-    #    "params": {
-    #        "max_ensemble_size": 500,
-    #        "feature_selection": "none", # Come da documentazione standard
-    #        "threshold": 0.92}
-    #},
-    #{
-    #    "name": BOSS_NAME,
-    #    "variant": "BOSS_Lite",
-    #    "params": {
-    #        "max_ensemble_size": 50,
-    #        "feature_selection": "chi2", # Molto più veloce e meno RAM
-    #        "threshold": 0.95,
-    #        "min_window": 20}
-    #},
+    {
+        "name": BOSS_NAME,
+        "variant": "BOSS_Standard",
+        "params": {
+            "max_ensemble_size": 500,
+            "feature_selection": "none", # Come da documentazione standard
+            "threshold": 0.92}
+    },
+    {
+        "name": BOSS_NAME,
+        "variant": "BOSS_Lite",
+        "params": {
+            "max_ensemble_size": 50,
+            "feature_selection": "chi2", # Molto più veloce e meno RAM
+            "threshold": 0.95,
+            "min_window": 20}
+    },
     {
         "name": BOSS_NAME,
         "variant": "BOSS_Super_Lite",
@@ -97,41 +97,41 @@ ALGORITHMS_TO_RUN = [
             "threshold": 0.99,
             "min_window": 50}
     },
-    #{
-    #    "name": DRCIF_NAME, 
-    #    "variant": "DrCIF_Standard", 
-    #    "params": {"n_estimators": 200, "att_subsample_size": 10}
-    #},
-    #{
-    #    "name": DRCIF_NAME, 
-    #    "variant": "DrCIF_Light", 
-    #    "params": {"n_estimators": 50, "att_subsample_size": 5, "n_intervals": 4}
-    #},
+    {
+        "name": DRCIF_NAME,
+        "variant": "DrCIF_Standard",
+        "params": {"n_estimators": 200, "att_subsample_size": 10}
+    },
+    {
+        "name": DRCIF_NAME,
+        "variant": "DrCIF_Light",
+        "params": {"n_estimators": 50, "att_subsample_size": 5, "n_intervals": 4}
+    },
     {
         "name": DRCIF_NAME,
         "variant": "DrCIF_Super_Light",
         "params": {"n_estimators": 10, "att_subsample_size": 3, "n_intervals": 2}
     },
-    #{
-    #    "name": HC2_NAME, 
-    #    "variant": "HC2_Standard", 
-    #    "params": {
-    #        "stc_params": {"n_shapelet_samples": 10000, "max_shapelets": None},
-    #        "drcif_params": {"n_estimators": 200, "att_subsample_size": 10},
-    #        "arsenal_params": {"num_kernels": 2000, "n_estimators": 25},
-    #        "tde_params": {"n_parameter_samples": 250, "max_ensemble_size": 50}
-    #    }
-    #},
-    #{
-    #    "name": HC2_NAME, 
-    #    "variant": "HC2_Lite", 
-    #    "params": {
-    #        "stc_params": {"n_shapelet_samples": 1000, "max_shapelets": 200},
-    #        "drcif_params": {"n_estimators": 50, "att_subsample_size": 5, "n_intervals": 4},
-    #        "arsenal_params": {"num_kernels": 1000, "n_estimators": 10},
-    #        "tde_params": {"n_parameter_samples": 100, "max_ensemble_size": 10}
-    #    }
-    #},
+    {
+        "name": HC2_NAME,
+        "variant": "HC2_Standard",
+        "params": {
+            "stc_params": {"n_shapelet_samples": 10000, "max_shapelets": None},
+            "drcif_params": {"n_estimators": 200, "att_subsample_size": 10},
+            "arsenal_params": {"num_kernels": 2000, "n_estimators": 25},
+            "tde_params": {"n_parameter_samples": 250, "max_ensemble_size": 50}
+        }
+    },
+    {
+        "name": HC2_NAME,
+        "variant": "HC2_Lite",
+        "params": {
+            "stc_params": {"n_shapelet_samples": 1000, "max_shapelets": 200},
+            "drcif_params": {"n_estimators": 50, "att_subsample_size": 5, "n_intervals": 4},
+            "arsenal_params": {"num_kernels": 1000, "n_estimators": 10},
+            "tde_params": {"n_parameter_samples": 100, "max_ensemble_size": 10}
+                  }
+    },
     {
         "name": HC2_NAME,
         "variant": "HC2_Super_Lite",
@@ -142,34 +142,35 @@ ALGORITHMS_TO_RUN = [
             "tde_params": {"n_parameter_samples": 51, "max_ensemble_size": 5}
         }
     },
-    #{
-    #    "name": RIC_RF_NAME, 
-    #    "variant": "RIC_Standard", 
-    #    "params": {"n_intervals": 100, "n_estimators": 200}
-    #},
-    #{
-    #    "name": RIC_RF_NAME, 
-    #    "variant": "RIC_Lite", 
-    #    "params": {"n_intervals": 20, "n_estimators": 50} 
+    {
+        "name": RIC_RF_NAME,
+        "variant": "RIC_Standard",
+        "params": {"n_intervals": 100, "n_estimators": 200}
+    },
+    {
+        "name": RIC_RF_NAME,
+        "variant": "RIC_Lite",
+        "params": {"n_intervals": 20, "n_estimators": 50}
+    },
     {
         "name": RIC_RF_NAME,
          "variant": "RIC_Super_Lite",
         "params": {"n_intervals": 10, "n_estimators": 10}
     },
-    #{
-    #    "name": STC_NAME, 
-    #    "variant": "STC_Standard", 
-    #    "params": {
-    #        "n_shapelet_samples": 10000, "n_estimators": 200,
-    #        "max_shapelets": None}
-    #},
-    #{
-    #    "name": STC_NAME, 
-    #    "variant": "STC_Light", 
-    #    "params": {
-    #        "n_shapelet_samples": 1000, "n_estimators": 50,
-    #        "max_shapelets": 200}
-    #},
+    {
+        "name": STC_NAME,
+        "variant": "STC_Standard",
+        "params": {
+            "n_shapelet_samples": 10000, "n_estimators": 200,
+            "max_shapelets": None}
+    },
+    {
+        "name": STC_NAME,
+        "variant": "STC_Light",
+        "params": {
+            "n_shapelet_samples": 1000, "n_estimators": 50,
+            "max_shapelets": 200}
+    },
     {
         "name": STC_NAME,
         "variant": "STC_Super_Lite",
@@ -177,31 +178,31 @@ ALGORITHMS_TO_RUN = [
             "n_shapelet_samples": 100, "n_estimators": 10,
             "max_shapelets": 50}
     },
-    #{
-    #    "name": WEASEL_NAME, 
-    #    "variant": "WEASEL_Standard", 
-    #    "params": {"window_inc": 2, "p_threshold": 0.05} 
-    #},
-    #{
-    #    "name": WEASEL_NAME, 
-    #    "variant": "WEASEL_Lite", 
-    #    "params": {"window_inc": 6, "p_threshold": 0.01} 
-    #},
+    {
+        "name": WEASEL_NAME,
+        "variant": "WEASEL_Standard",
+        "params": {"window_inc": 2, "p_threshold": 0.05}
+    },
+    {
+        "name": WEASEL_NAME,
+        "variant": "WEASEL_Lite",
+        "params": {"window_inc": 6, "p_threshold": 0.01}
+    },
     {
         "name": WEASEL_NAME,
         "variant": "WEASEL_Super_Lite",
         "params": {"window_inc": 12, "p_threshold": 0.001}
     },
-    #{
-    #    "name": INCEPTION_NAME,
-    #    "variant": "Inception_Standard",
-    #    "params": {"n_epochs": 1500, "batch_size": 64}
-    #},
-    #{
-    #    "name": INCEPTION_NAME, 
-    #    "variant": "Inception_Lite", 
-    #    "params": {"n_epochs": 150, "batch_size": 64, "kernel_size":20, "n_filters":16} 
-    #},
+    {
+        "name": INCEPTION_NAME,
+        "variant": "Inception_Standard",
+        "params": {"n_epochs": 1500, "batch_size": 64}
+    },
+    {
+        "name": INCEPTION_NAME,
+        "variant": "Inception_Lite",
+        "params": {"n_epochs": 150, "batch_size": 64, "kernel_size":20, "n_filters":16}
+    },
     {
        "name": INCEPTION_NAME,
         "variant": "Inception_Super_Lite",
@@ -209,16 +210,16 @@ ALGORITHMS_TO_RUN = [
                "kernel_size":10, "n_filters":8
                }
     },
-    #{
-    #    "name": RESNET_NAME,
-    #    "variant": "ResNet_Standard",
-    #    "params": {"n_epochs": 1500, "batch_size": 16}
-    #},
-    #{
-    #    "name": RESNET_NAME, 
-    #    "variant": "ResNet_Lite", 
-    #    "params": {"n_epochs": 150, "batch_size": 32} 
-    #},
+    {
+        "name": RESNET_NAME,
+       "variant": "ResNet_Standard",
+        "params": {"n_epochs": 1500, "batch_size": 16}
+    },
+    {
+        "name": RESNET_NAME,
+        "variant": "ResNet_Lite",
+        "params": {"n_epochs": 150, "batch_size": 32}
+    },
     {
         "name": RESNET_NAME,
         "variant": "ResNet_Super_Lite",
