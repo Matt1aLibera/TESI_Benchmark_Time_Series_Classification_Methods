@@ -71,23 +71,23 @@ ALGORITHMS_TO_RUN = [
         "variant": "Arsenal_Super_Lite", 
         "params": {"n_estimators": 5, "num_kernels": 500} # Veloce, per test
     },
-    {
-        "name": BOSS_NAME, 
-        "variant": "BOSS_Standard", 
-        "params": {
-            "max_ensemble_size": 500,
-            "feature_selection": "none", # Come da documentazione standard
-            "threshold": 0.92}
-    },
-    {
-        "name": BOSS_NAME, 
-        "variant": "BOSS_Lite", 
-        "params": {
-            "max_ensemble_size": 50,
-            "feature_selection": "chi2", # Molto più veloce e meno RAM
-            "threshold": 0.95,
-            "min_window": 20}
-    },
+    #{
+    #    "name": BOSS_NAME,
+    #    "variant": "BOSS_Standard",
+    #    "params": {
+    #        "max_ensemble_size": 500,
+    #        "feature_selection": "none", # Come da documentazione standard
+    #        "threshold": 0.92}
+    #},
+    #{
+    #    "name": BOSS_NAME,
+    #    "variant": "BOSS_Lite",
+    #    "params": {
+    #        "max_ensemble_size": 50,
+    #        "feature_selection": "chi2", # Molto più veloce e meno RAM
+    #        "threshold": 0.95,
+    #        "min_window": 20}
+    #},
     {
         "name": BOSS_NAME, 
         "variant": "BOSS_Super_Lite", 
@@ -192,11 +192,11 @@ ALGORITHMS_TO_RUN = [
         "variant": "WEASEL_Super_Lite", 
         "params": {"window_inc": 12, "p_threshold": 0.001} 
     },
-    {
-        "name": INCEPTION_NAME, 
-        "variant": "Inception_Standard", 
-        "params": {"n_epochs": 1500, "batch_size": 64} 
-    },
+    #{
+    #    "name": INCEPTION_NAME,
+    #    "variant": "Inception_Standard",
+    #    "params": {"n_epochs": 1500, "batch_size": 64}
+    #},
     #{
     #    "name": INCEPTION_NAME, 
     #    "variant": "Inception_Lite", 
@@ -209,11 +209,11 @@ ALGORITHMS_TO_RUN = [
                    "kernel_size":10, "n_filters":8
                    } 
     },
-    {
-        "name": RESNET_NAME, 
-        "variant": "ResNet_Standard", 
-        "params": {"n_epochs": 1500, "batch_size": 16} 
-    },
+    #{
+    #    "name": RESNET_NAME,
+    #    "variant": "ResNet_Standard",
+    #    "params": {"n_epochs": 1500, "batch_size": 16}
+    #},
     #{
     #    "name": RESNET_NAME, 
     #    "variant": "ResNet_Lite", 
