@@ -18,7 +18,7 @@ def run_rocket_benchmark(dataset_name: str, data: Dict[str, Any], seed: int,
     classifier = Rocket(
         num_kernels=n_kernels,
         random_state=seed,
-        n_jobs=1 # Parallelizziamo i seed nel main, non qui
+        #n_jobs=1 # Parallelizziamo i seed nel main, non qui
     )
 
     # Misura tempo di FIT

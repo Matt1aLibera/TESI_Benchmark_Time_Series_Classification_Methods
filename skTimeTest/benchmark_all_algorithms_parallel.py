@@ -313,7 +313,7 @@ if __name__ == "__main__":
             ds_start = datetime.now()
             # SE l'algoritmo è ResNet, forziamo n_jobs a 1 nel main
             # perché TensorFlow usa già tutti i core CPU/GPU internamente.
-            actual_n_jobs = 1 if algo_name in [RESNET_NAME, INCEPTION_NAME] else 3
+            actual_n_jobs = 1 if algo_name in [RESNET_NAME, INCEPTION_NAME] else 1
 
             print(f"Dataset: {dataset_name} | Parallelizzazione su {len(SEEDS)} Seed...")
 
