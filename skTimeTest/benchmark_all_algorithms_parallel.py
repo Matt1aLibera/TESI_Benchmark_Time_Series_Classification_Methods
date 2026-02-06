@@ -311,25 +311,32 @@ if __name__ == "__main__":
 
         for dataset_name, data in all_data.items():
             ds_start = datetime.now()
-            # SE l'algoritmo è ResNet, forziamo n_jobs a 1 nel main
-            # perché TensorFlow usa già tutti i core CPU/GPU internamente.
-            actual_n_jobs = 1 if algo_name in [RESNET_NAME, INCEPTION_NAME] else 1
 
-            print(f"Dataset: {dataset_name} | Parallelizzazione su {len(SEEDS)} Seed...")
+            print(f"Dataset: {dataset_name} | Esecuzione sequenziale dei {len(SEEDS)} Seed...")
 
-            # --- PARALLELIZZAZIONE ESTERNA ---
-            # Esegue i 3 seed contemporaneamente
-            dataset_runs = Parallel(n_jobs=actual_n_jobs)(
-                delayed(run_specific_benchmark)(dataset_name, data, seed, algo_cfg)
-                for seed in SEEDS
-            )
+            dataset_runs = []
+
+            # Sostituiamo Joblib con un ciclo for standard
+            for seed in SEEDS:
+                seed_start = datetime.now()
+
+                # Gestione n_jobs per l'algoritmo
+                # Se Deep Learning (ResNet/Inception), TF gestisce i thread da solo.
+                # Per gli altri, diciamo all'algoritmo di usare tutti i core (-1).
+                if algo_name in [RESNET_NAME, INCEPTION_NAME]:
+                    algo_cfg["params"]["n_jobs"] = 1
+                else:
+                    algo_cfg["params"]["n_jobs"] = -1
+
+                # Esecuzione diretta del benchmark per il singolo seed
+                res = run_specific_benchmark(dataset_name, data, seed, algo_cfg)
+                dataset_runs.append(res)
+
+                # Feedback immediato per il seed appena concluso
+                print(
+                    f" Seed {res['seed']} | Acc: {res['accuracy']:.4f} | Fit: {res['fit_time']:.2f}s | Pred: {res['predict_time']:.2f}s")
 
             all_benchmark_results.extend(dataset_runs)
-
-            # Stampa i dettagli per ogni singolo seed appena concluso
-            # Print di feedback immediato
-            for res in dataset_runs:
-                print(f" Seed {res['seed']} | Acc: {res['accuracy']:.4f} | Fit: {res['fit_time']:.2f}s | Pred: {res['predict_time']:.2f}s")
 
             ds_end = datetime.now()
             print(f"Tempo Reale Totale per {dataset_name}: {ds_end - ds_start}")
@@ -341,8 +348,6 @@ if __name__ == "__main__":
         print("=" * 70)
 
     # --- RIASSUNTO FINALE ---
-    final_df = pd.DataFrame(all_benchmark_results)
-
     # --- 1. CREAZIONE DATAFRAME TOTALE ---
     final_df = pd.DataFrame(all_benchmark_results)
 
