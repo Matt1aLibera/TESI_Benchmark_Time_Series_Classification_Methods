@@ -28,7 +28,7 @@ def run_drcif_benchmark(dataset_name: str, data: Dict[str, Any], seed: int,
         n_estimators=n_estimators,
         n_intervals=n_intervals,  # La formula automatica è la scelta migliore per la tesi
         att_subsample_size=att_subsample_size,
-        #n_jobs=1,          # Parallelismo gestito dai seed nel main
+        n_jobs=-1,          # Parallelismo gestito dai seed nel main
         random_state=seed
     )
 

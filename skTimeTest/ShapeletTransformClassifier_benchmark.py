@@ -34,7 +34,7 @@ def run_stc_benchmark(dataset_name: str, data: Dict[str, Any], seed: int,
         max_shapelets=max_sh,
         batch_size=100,
         random_state=seed,
-        #n_jobs=1  # Parallelismo gestito dal main sui seed
+        n_jobs=-1  # Parallelismo gestito dal main sui seed
     )
 
     # Addestramento (Fit)

@@ -20,7 +20,7 @@ def run_arsenal_benchmark(dataset_name: str, data: Dict[str, Any], seed: int,
         num_kernels=n_kernels,
         n_estimators=n_estimators,
         random_state=seed,
-        #n_jobs=1
+        n_jobs=-1
     )
 
     # Addestramento (Fit)

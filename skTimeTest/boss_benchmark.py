@@ -50,7 +50,7 @@ def run_boss_benchmark(dataset_name: str, data: Dict[str, Any], seed: int,
         min_window=calc_min_window,
         max_win_len_prop=requested_max_prop,
         random_state=seed,
-        #n_jobs=1
+        n_jobs=-1
     )
 
     start_fit = time.time()

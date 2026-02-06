@@ -27,7 +27,7 @@ def run_hc2_benchmark(dataset_name: str, data: Dict[str, Any], seed: int,
         arsenal_params=arsenal_p,
         tde_params=tde_p,
         time_limit_in_minutes=time_limit,
-        #n_jobs=1,
+        n_jobs=-1,
         random_state=seed,
         verbose=0
     )
