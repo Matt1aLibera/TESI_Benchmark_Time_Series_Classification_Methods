@@ -35,7 +35,7 @@ def run_weasel_benchmark(dataset_name: str, data: Dict[str, Any], seed: int,
         feature_selection='chi2',
         support_probabilities=False,
         random_state=seed,
-        n_jobs=7
+        n_jobs=12
     )
 
     # Addestramento (Fit)

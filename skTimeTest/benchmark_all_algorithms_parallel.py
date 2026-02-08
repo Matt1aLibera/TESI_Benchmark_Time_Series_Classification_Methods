@@ -1,5 +1,7 @@
 import sys
 import os
+import gc
+import traceback
 # Reindirizza stderr a null per silenziare i warning a livello C/C++
 #sys.stderr = open(os.devnull, 'w')
 
@@ -7,6 +9,7 @@ import pandas as pd
 from typing import List, Dict, Any
 from joblib import Parallel, delayed
 from datetime import datetime
+from sktime.datasets import load_from_ucr_tsv_to_dataframe
 
 # Import dei tuoi moduli benchmark
 from weasel_benchmark import run_weasel_benchmark, ALGO_NAME as WEASEL_NAME
@@ -59,12 +62,12 @@ ALGORITHMS_TO_RUN = [
     {
         "name": ARSENAL_NAME,
         "variant": "Arsenal_Standard",
-        "params": {"n_estimators": 25, "num_kernels": 2000} # Veloce, per test
+        "params": {"n_estimators": 25, "num_kernels": 2000}
     },
     {
         "name": ARSENAL_NAME,
         "variant": "Arsenal_Lite",
-        "params": {"n_estimators": 10, "num_kernels": 1000} # Veloce, per test
+        "params": {"n_estimators": 10, "num_kernels": 1000}
     },
     {
         "name": ARSENAL_NAME,
@@ -212,7 +215,7 @@ ALGORITHMS_TO_RUN = [
     },
     {
         "name": RESNET_NAME,
-       "variant": "ResNet_Standard",
+        "variant": "ResNet_Standard",
         "params": {"n_epochs": 1500, "batch_size": 16}
     },
     {
@@ -231,15 +234,36 @@ all_benchmark_results: List[Dict[str, Any]] = []
 
 
 def load_all_ucr_datasets(dataset_names: List[str], base_path: str) -> Dict[str, Dict[str, Any]]:
-    from sktime.datasets import load_from_ucr_tsv_to_dataframe
     loaded = {}
-    print(f"Inizio caricamento dei dataset da: {base_path}")
+    
+    print(f"Inizio caricamento e normalizzazione dei dataset da: {base_path}")
     for name in dataset_names:
         try:
             train_path = os.path.join(base_path, name, f"{name}_TRAIN.tsv")
             test_path = os.path.join(base_path, name, f"{name}_TEST.tsv")
             X_train, y_train = load_from_ucr_tsv_to_dataframe(train_path)
             X_test, y_test = load_from_ucr_tsv_to_dataframe(test_path)
+
+            # --- Z-NORMALIZZAZIONE MANUALE (Instance-wise) ---
+            def z_normalize_panel(X):
+                # X è un DataFrame sktime (nested: ogni cella è una Series)
+                # Facciamo una copia per evitare problemi di puntatori
+                X_norm = X.copy()
+                for i in range(len(X_norm)):
+                    for j in range(len(X_norm.columns)):
+                        series = X_norm.iloc[i, j]
+                        m = series.mean()
+                        s = series.std()
+                        # Se la serie è costante (std=0), sottraiamo solo la media
+                        if s == 0:
+                            X_norm.iloc[i, j] = series - m
+                        else:
+                            X_norm.iloc[i, j] = (series - m) / s
+                return X_norm
+
+            X_train = z_normalize_panel(X_train)
+            X_test = z_normalize_panel(X_test)
+            # ------------------------------------------------
 
             loaded[name] = {
                 "X_train": X_train, "y_train": y_train,
@@ -295,32 +319,36 @@ def run_specific_benchmark(dataset_name: str, data: Dict[str, Any], seed: int, a
 
 
 if __name__ == "__main__":
-    # Registra l'ora di inizio assoluta
-    start_global = datetime.now()
-    print(f"\nAVVIO SESSIONE BENCHMARK: {start_global.strftime('%Y-%m-%d %H:%M:%S')}")
-
     all_data = load_all_ucr_datasets(DATASET_NAMES, UCR_BASE_PATH)
 
     all_benchmark_results = []
+    # Definiamo il nome del file CSV per il salvataggio incrementale
+    csv_filename = "benchmark_results_detailed.csv"
+    # --- PULIZIA AUTOMATICA ---
+    if os.path.exists(csv_filename):
+        print(f"Rilevato vecchio file {csv_filename}. Rimozione in corso per nuova run...")
+        os.remove(csv_filename)
+    # --------------------------
+    # Registra l'ora di inizio assoluta
+    start_global = datetime.now()
+    print(f"\nAVVIO SESSIONE BENCHMARK: {start_global.strftime('%Y-%m-%d %H:%M:%S')}", flush=True)
 
     for algo_cfg in ALGORITHMS_TO_RUN:
         algo_name = algo_cfg["name"]
         variant_name = algo_cfg["variant"]
         algo_start = datetime.now()
-        print(f"\n{'='*70}\n ESECUZIONE: {variant_name}\n{'='*70}")
-        print(f" ORA INIZIO: {algo_start.strftime('%H:%M:%S')}")
+        print(f"\n{'='*70}\n ESECUZIONE: {variant_name}\n{'='*70}", flush=True)
+        print(f" ORA INIZIO: {algo_start.strftime('%H:%M:%S')}", flush=True)
 
         for dataset_name, data in all_data.items():
             ds_start = datetime.now()
-
-            print(f"Dataset: {dataset_name} | Esecuzione sequenziale dei {len(SEEDS)} Seed...")
+            print(f"Dataset: {dataset_name} | Esecuzione sequenziale dei {len(SEEDS)} Seed...", flush=True)
 
             dataset_runs = []
 
             # Sostituiamo Joblib con un ciclo for standard
             for seed in SEEDS:
                 seed_start = datetime.now()
-
                 # Gestione n_jobs per l'algoritmo
                 # Se Deep Learning (ResNet/Inception), TF gestisce i thread da solo.
                 # Per gli altri, diciamo all'algoritmo di usare tutti i core (-1).
@@ -329,32 +357,43 @@ if __name__ == "__main__":
                 else:
                     algo_cfg["params"]["n_jobs"] = -1
 
-                # Esecuzione diretta del benchmark per il singolo seed
-                res = run_specific_benchmark(dataset_name, data, seed, algo_cfg)
-                dataset_runs.append(res)
+                try: #proteggiamo ogni singolo seed con try catch
+                    # Esecuzione diretta del benchmark per il singolo seed
+                    res = run_specific_benchmark(dataset_name, data, seed, algo_cfg)
+                    dataset_runs.append(res)
 
-                # Feedback immediato per il seed appena concluso
-                print(
-                    f" Seed {res['seed']} | Acc: {res['accuracy']:.4f} | Fit: {res['fit_time']:.2f}s | Pred: {res['predict_time']:.2f}s")
+                    # 2. SALVATAGGIO INCREMENTALE SUL CSV
+                    df_row = pd.DataFrame([res])
+                    # mode='a' aggiunge la riga; header viene scritto solo se il file non esiste ancora
+                    df_row.to_csv(csv_filename, mode='a', index=False, header=not os.path.exists(csv_filename))
+
+                    # Feedback immediato per il seed appena concluso
+                    print(f" Seed {res['seed']} | Acc: {res['accuracy']:.4f} | Fit: {res['fit_time']:.2f}s | Pred: {res['predict_time']:.2f}s", flush=True)
+
+                except Exception as e: # <--- Cattura qualsiasi errore (Memoria, Valore, Sistema)
+                    print(f"\n[!!!] ERRORE durante {variant_name} su {dataset_name} (Seed {seed}):", flush=True)
+                    print(f"Dettaglio errore: {e}", flush=True)
+                    traceback.print_exc() # Stampa l'errore completo con la riga esatta nel codice
+                    # Non aggiungiamo nulla a dataset_runs, quindi questo seed verrà saltato nel riassunto.
+                    # Il programma NON si ferma, passerà al prossimo seed o dataset.
+                    continue
 
             all_benchmark_results.extend(dataset_runs)
 
             ds_end = datetime.now()
-            print(f"Tempo Reale Totale per {dataset_name}: {ds_end - ds_start}")
-            print("-" * 30)
+            print(f"Tempo Reale Totale per {dataset_name}: {ds_end - ds_start}", flush=True)
+            print("-" * 30, flush=True)
+            del dataset_runs # Libera la lista di risultati in memoria
+            gc.collect()     # Forza la pulizia della RAM
 
         algo_end = datetime.now()
-        print(f"\n--- COMPLETATO: {variant_name} ---") 
-        print(f" Durata Totale Algoritmo: {algo_end - algo_start}")
-        print("=" * 70)
+        print(f"\n--- COMPLETATO: {variant_name} ---", flush=True) 
+        print(f" Durata Totale Algoritmo: {algo_end - algo_start}", flush=True)
+        print("=" * 70, flush=True)
 
     # --- RIASSUNTO FINALE ---
     # --- 1. CREAZIONE DATAFRAME TOTALE ---
     final_df = pd.DataFrame(all_benchmark_results)
-
-    # --- 2. SALVATAGGIO CSV DETTAGLIATO (Fondamentale per i grafici futuri) ---
-    # Questo salva ogni singola riga (ogni seed) con tutte le colonne nuove
-    final_df.to_csv("benchmark_results_detailed.csv", index=False)
 
     # --- 3. LOGICA DEL RIASSUNTO ---
     metrics_to_agg = ['accuracy', 'f1_score', 'fit_time', 'predict_time', 'total_time_seconds']
@@ -383,7 +422,7 @@ if __name__ == "__main__":
     final_summary_combined = final_summary_combined.reindex(columns=STANDARD_ORDER)
 
     # --- 4. STAMPA FINALE ---
-    print("\n" + "#" * 100) # Allunghiamo ancora un po'
-    print(" RIASSUNTO GENERALE (Medie e Deviazione Standard sui Seed)")
-    print("#" * 100)
+    print("\n" + "#" * 100, flush=True)
+    print(" RIASSUNTO GENERALE (Medie e Deviazione Standard sui Seed)", flush=True)
+    print("#" * 100, flush=True)
     print(final_summary_combined.to_markdown(floatfmt=".4f"))
