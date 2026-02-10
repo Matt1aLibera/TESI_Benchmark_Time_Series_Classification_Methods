@@ -1,0 +1,879 @@
+ML:
+SUPERVISED LAERNING: 1-ha variabili in input  anche dette features, variabili indipendenti
+		     2-ha una funzione
+		     3-ha un output/ variabili di output, target, varaibili dipendenti (devono essere "indovinate" dalla funzione)
+		 -usa un training dataset per addestrare il modello, in cui conosciamo il vero valore per le variabili di output
+
+                       2 tipi: REGRESSION:predirre una variabile target numerica continua in base alle variabili di input
+			       (esempio predirre il prezzo di una casa dando n features come metri quadri, anno di costruzione ecc)
+				spesso si cercano delle dipendenze lineari tra i dati
+
+			       CLASSIFICATION: assegnare una classe a un dato (es classificare le email in spam social ecc in base al contenuto, chi invia ecc)
+				spesso si usano dei kernel, ovvero dipendenze non lineari , formule, ad esemio per calcolare il peso di una persone si usa BMI
+
+UNSUPERVISED LEARNING: non diciamo al modello quale classi sta cercando, il modello raggruppa per similarità, ma non sa cosa sta raggruppando
+
+REGRESSION: La regressione è un metodo per prevedere un numero guardando dei dati
+			Serve per:
+						prevedere un valore numerico (prezzo, temperatura, tempo, altezza, etc.)
+						capire come alcune cose influenzano altre
+
+		LINEAR REGRESSION: La regressione lineare è un metodo statistico che serve a descrivere e quantificare la relazione tra una variabile di interesse (detta variabile dipendente) e una o più variabili esplicative (dette variabili indipendenti).
+						   L’idea fondamentale è assumere che tale relazione possa essere approssimata da una combinazione lineare delle variabili esplicative.
+							Il modello individua i coefficienti che descrivono quanto e in che direzione ogni variabile indipendente contribuisce al valore della variabile dipendente.
+							La stima dei coefficienti viene ottenuta cercando la linea (o iperpiano, in caso di più variabili) che meglio “si adatta” ai dati osservati, nel senso di minimizzare l’errore complessivo tra valori previsti e valori reali.
+								È un modello ampiamente usato perché:
+									è interpretabile,
+									consente di fare previsioni su variabili quantitative,
+									permette di valutare l’effetto di ciascuna variabile e la loro significatività statistica.
+
+		RIDGE REGRESSION: La ridge regression è una variante della regressione lineare progettata per migliorare la stabilità e la capacità di generalizzazione del modello quando i dati presentano problemi come multicollinearità
+						  (variabili indipendenti molto correlate tra loro) o quando il numero di variabili è molto elevato rispetto al numero di osservazioni.
+							Concettualmente, la ridge regression applica una forma di “regolarizzazione”: introduce una penalizzazione che scoraggia coefficienti troppo grandi. In altre parole,
+							impone al modello di preferire soluzioni più semplici e più stabili, sacrificando leggermente l’aderenza perfetta ai dati per ottenere un modello che funziona meglio su nuovi dati.
+							Il risultato è un modello che rimane lineare, ma i cui coefficienti sono controllati in maniera da evitare comportamenti instabili e overfitting. Ciò rende la ridge regression particolarmente utile in ambiti con dataset complessi,
+							numerosi predittori o dati rumorosi.
+							(aggiunge un piccolo bias per avere una grossa diminuzione di varianza, ovvero per eliminare l'overfitting, ovvero rendere le predizioni meno sensibili al training set data. Si usa un termine lambda per "desensibilizzare" la relazione tra dati, rendere il dato dipendende, meno dipendente dai dati indipendenti)
+							Usa la SSR (Sum Of Squared Errors) o MSE (Mean Squared Errors) MAE (Mean Absolute Error) per stimare la funzione (che è un tipo di loss function/funzione costo)
+
+		LOGISTIC REGRESSION: La logistic regression è un modello statistico utilizzato per problemi di classificazione binaria, cioè quando l’obiettivo è prevedere la probabilità che un’osservazione appartenga a una di due categorie
+							 (ad esempio: malato/non malato, spam/non spam, successo/fallimento).
+								Il modello parte da una combinazione lineare delle variabili esplicative — come nella regressione lineare — ma la trasforma tramite una funzione non lineare (la funzione logistica).
+								Questa trasformazione permette di ottenere valori compresi tra 0 e 1, interpretabili come probabilità.
+								La logistic regression è molto usata perché permette sia di fare classificazione, sia di interpretare l’influenza delle variabili sul risultato in termini di variazione delle probabilità o, più formalmente, degli odds.
+								È inoltre un modello robusto, semplice da stimare, e molto efficace quando la relazione tra predittori ed esito è “linearmente separabile” in senso statistico.
+
+BIAS: è l'inabilità per un metodo di machine learning (esempio regressione lineare) di catturare la vera relazione (ad esempio se la relazione è una funzione simile esponenziale,
+      un classificatore a regressione lineare non andra bene perche traccia una linea retta tra)
+
+VARIANCE: La differenza tra come un modello si adatta (fit) a diversi dataset. (ed esempio un modello sul training set ha bias 0, ovvero è perfetto, ma ha bias alto nel test set,
+		  questo significa che c'è della varianza tra i set usati )
+
+OVERFITTING: un modello con bias = 0 ad esempio ha overfitting(se ha bias 0 sul training set, ovvero è molto adatto al training set, ma non si adatta bene al test set, allora ha overfitting)
+
+LOSS FUNCTION: La funzione di costo non è altro che la misura dell'errore. Per ogni set di parametri, essa quantifica la discrepanza tra le previsioni del modello e i valori reali (il ground truth) sui dati di addestramento.
+				L'obiettivo dell'addestramento non è minimizzare la Loss su un singolo esempio, ma minimizzare la Funzione di Costo (o Objective Function), che è tipicamente la media della Loss Function calcolata su tutti gli esempi del dataset di training o su un mini-batch
+				Il tipo di Loss Function utilizzata è strettamente vincolato dalla natura del problema che si sta risolvendo: Regressione o Classificazione.
+					Nei problemi di Regressione, l'obiettivo è prevedere un valore numerico continuo (ad esempio, il prezzo di una casa o la temperatura). Le Loss Functions si concentrano sulla distanza tra il valore predetto e quello effettivo.
+					- Mean Squared Error (MSE) o L2 Loss: L'Errore Quadratico Medio (MSE) è la media dei quadrati degli errori. Penalizza gli scarti elevando al quadrato la differenza tra previsione e valore reale.
+					  Penalità agli Outlier: La quadratura amplifica gli errori grandi. Questo rende l'MSE molto sensibile agli outlier (valori anomali), costringendo il modello a concentrarsi sulla loro riduzione.
+					  È una funzione convessa e liscia (derivabile ovunque), il che la rende ideale e computazionalmente efficiente per l'ottimizzazione tramite Gradient Descent.
+					- Mean Absolute Error (MAE) o L1 Loss: L'Errore Assoluto Medio (MAE) è la media dei valori assoluti degli errori
+					  Robustezza agli Outlier: Penalizza tutti gli errori in modo lineare. Non amplificando gli errori grandi, l'MAE è più robusto agli outlier rispetto all'MSE
+					  Problema della Derivata: La funzione valore assoluto non è differenziabile nel punto zero, il che può creare problemi tecnici con il Gradient Descent, anche se soluzioni alternative come i subgradienti vengono spesso adottate.
+					- Sum of Squared Residuals (SSR):è la somma degli scarti al quadrato su tutto il dataset. In Machine Learning, minimizzare l'SSR è matematicamente equivalente a minimizzare l'MSE
+					- Huber Loss (Smooth L1 Loss): La Huber Loss è un ibrido che cerca di unire il meglio di MSE e MAE
+					  Agisce come MSE per gli errori piccoli (vicino a zero, dove è liscia) e come MAE per gli errori grandi
+					  È meno sensibile agli outlier del MSE pur mantenendo la differenziabilità attorno allo zero, rendendola un'ottima scelta per dati rumorosi
+
+					Nei problemi di Classificazione, l'obiettivo è prevedere una classe discreta (ad esempio, gatto/cane, o classe A/B/C). Queste funzioni non misurano la distanza geometrica, ma la distanza di probabilità o il margine di confidenza.
+					- Cross-Entropy Loss (Log Loss): Misura l'errore di previsione probabilistica tra la distribuzione di probabilità predetta e la distribuzione vera (spesso un vettore one-hot encoded).
+					  Penalizza pesantemente i modelli che assegnano una bassa probabilità alla classe corretta. Poiché utilizza il logaritmo, tende asintoticamente all'infinito quando la probabilità predetta per la classe vera si avvicina a zero.
+						si divide in: Binary Cross-Entropy (per Classificazione Binaria):Utilizzata per due classi (0 o 1).
+									  Categorical Cross-Entropy (per Classificazione Multi-Classe): Utilizzata per più di due classi (ad esempio, A, B, C). Richiede che l'output del modello sia passato attraverso una funzione di attivazione Softmax per ottenere una distribuzione di probabilità.
+					- Hinge Loss: Sviluppata per i Support Vector Machines (SVM): Non vuole solo classificare correttamente, ma vuole che la previsione sia corretta con un margine di confidenza minimo.
+					  La Loss è zero se la classificazione è corretta e la confidenza è maggiore di un certo margine (tipicamente 1). Altrimenti, la Loss cresce linearmente.
+					- Focal Loss: Sviluppata per problemi con forte sbilanciamento di classe (ad esempio, rilevamento di oggetti, dove lo sfondo è la classe dominante).
+					  Modifica la Cross-Entropy Loss per ridurre la penalità sugli esempi facili e aumentare la penalità sugli esempi difficili (ma corretti) e, soprattutto, sugli errori
+					  Impedisce che il gran numero di esempi facili ma correttamente classificati (come lo sfondo) domini il gradiente durante l'addestramento
+
+
+GRADIENT DESCENT (OTTIMIZZAZIONE, DISCESA DEL GRADIENTE: Il Gradient Descent (GD) è un metodo iterativo per trovare i minimi locali di una funzione differenziabile, che nel contesto del machine learning è la funzione di costo (o loss function.
+			Il nostro obiettivo è trovare il vettore di parametri (che include pesi e bias del modello) che minimizza questa funzione.
+			Il meccanismo guida del GD è il gradiente della funzione di costo .Definizione: Il gradiente è un vettore di tutte le derivate parziali della funzione di costo rispetto a ciascuno dei parametri del modello.
+			Il gradiente in un punto specifico indica la direzione in cui la funzione di costo cresce più rapidamente e ne quantifica la pendenza (o ripidità)
+			Poiché vogliamo minimizzare (scendere), il Gradient Descent si muove nella direzione opposta al gradiente
+			In termini discorsivi, il gradiente ci dice esattamente: "Se cambio un parametro di una piccola quantità, quanto cambierà la funzione di costo in quel preciso momento?"
+			L'algoritmo procede per passi discreti, aggiornando iterativamente i parametri
+			Il termine LEARNING RATE è uno scalare positivo che agisce come fattore di scala sul gradiente
+				Controlla la lunghezza del passo (o la magnitudine della correzione) che il modello applica ai suoi parametri
+				Se è troppo grande, il modello potrebbe divergere o oscillare attorno al minimo senza mai convergere (il passo è troppo grande e salta il fondo). Se è troppo piccolo, la convergenza sarà eccessivamente lenta, aumentando i costi computazionali
+			A seconda di quanti dati vengono utilizzati per calcolare il gradiente ad ogni passo, esistono tre varianti principali:
+				Batch Gradient Descent: Utilizza tutti i dati di training per calcolare il gradiente in un'unica volta. Molto preciso, ma lento su set di dati grandi.
+				Stochastic Gradient Descent (SGD): Utilizza un singolo esempio di training alla volta. Molto veloce, ma il percorso verso il minimo è molto "rumoroso" (a scatti).
+				Mini-Batch Gradient Descent: Un compromesso, utilizza un sottoinsieme (un piccolo batch) di dati. È la variante più utilizzata perché offre un buon equilibrio tra velocità e stabilità di convergenza.
+			Il Gradient Descent è, quindi, l'algoritmo che permette ai modelli di "imparare" regolando gradualmente i loro parametri in base alla direzione in cui l'errore di previsione diminuisce più velocemente.
+
+3 metodi per trovare uno sweetspot tra bias e varianza in un modello: REGOLARIZZAZIONE, BOOSTING, BAGGING
+
+
+- Features/caratteristiche: dati piu caratteristici di un oggetto/dataset descritto, es
+	ECG:
+	# Dati NON caratteristici:
+	- Rumore di fondo
+	- Piccole variazioni casuali
+
+	# Dati CARATTERISTICI:
+	- Forma dell'onda P
+	- Durata complesso QRS
+	- Altezza onda T
+
+-SUPPORT VECTOR MACHINE (SVM): La Support Vector Machine (SVM) è un algoritmo di apprendimento supervisionato che si usa per problemi di classificazione e, in misura minore, di regressione.
+							   Il suo principio fondamentale è trovare l'iperpiano ottimale, ovvero il confine decisionale che non solo separa le classi in modo netto, ma lo fa con il margine di separazione più ampio possibile.
+
+							   Questo margine è definito come la distanza perpendicolare tra l'iperpiano e i punti di dati più vicini di ciascuna classe. L'algoritmo di ottimizzazione della SVM è progettato proprio per massimizzare questa distanza.
+							   A differenza di altri classificatori che si preoccupano di ogni singolo punto, la SVM è definita in modo parsimonioso solo da questi pochi, cruciali punti: i vettori di supporto.
+							   Questi vettori sono i punti sul confine del margine e sono gli unici a influenzare la posizione finale dell'iperpiano.
+
+							   Nel mondo reale, i dati sono raramente linearmente separabili e presentano spesso sovrapposizioni o outlier. Per gestire questa realtà, la SVM adotta l'approccio Soft Margin,
+							   che introduce la variabile di slack per tollerare alcune violazioni del margine, o persino misclassificazioni, in cambio di un confine decisionale più robusto e generalizzabile.
+							   L'iperparametro C gestisce il trade-off tra la massimizzazione del margine e la minimizzazione di queste violazioni.
+
+							   Per affrontare problemi con confini decisionali complessi e non lineari, la SVM utilizza il rivoluzionario Kernel Trick.
+							   Questa tecnica permette di mappare implicitamente i dati da uno spazio originale di bassa dimensione a uno spazio di feature ad alta o persino infinita dimensionalità, dove i dati diventano linearmente separabili.
+							   Il Kernel Trick evita l'onere computazionale dell'effettiva trasformazione, calcolando semplicemente la similitudine tra i vettori di supporto nello spazio ad alta dimensione tramite una funzione kernel (come la RBF).
+							   In questo modo, la SVM può costruire confini decisionali estremamente sofisticati (e non lineari) pur risolvendo formalmente un problema di ottimizzazione lineare nello spazio trasformato.
+
+-DECISION TREE (albero di decisione): Un Albero di Decisione è un algoritmo di apprendimento supervisionato che utilizza una struttura a grafo simile a un albero per prendere decisioni. È un modello predittivo e interpretabile che suddivide i dati in sottoinsiemi sempre più piccoli in base a una serie di regole logiche "se-allora".
+											1. La Struttura dell'Albero:
+												-Nodo Radice (Root Node): Rappresenta l'intero set di dati e la prima suddivisione basata sulla feature più significativa.
+												-Nodi Interni (Decision Nodes): Punti in cui i dati vengono divisi in base a una condizione su una specifica caratteristica (es. "La temperatura è > 20°C?").
+												-Rami (Branches): Rappresentano l'esito della decisione (Sì/No, Vero/Falso) e collegano i nodi.
+												-Foglie (Leaf Nodes): I punti finali dell'albero. Non contengono ulteriori suddivisioni e rappresentano la predizione finale (la classe per la classificazione o il valore numerico per la regressione).
+											2. Come "Impara" l'Albero: Il Criterio di Scissione (Splitting): L'obiettivo dell'albero è creare gruppi il più "puri" possibile (ovvero composti da elementi della stessa classe). Per decidere quale feature usare per dividere un nodo, l'algoritmo misura la riduzione dell'incertezza. I parametri più comuni sono:
+												-Gini Impurity: Misura la probabilità che un elemento scelto a caso sia classificato in modo errato. L'albero cerca di minimizzare questo valore ad ogni split.
+												-Information Gain (Entropia): Basato sulla teoria dell'informazione, misura quanto "disordine" c'è nei dati. L'albero sceglie lo split che riduce maggiormente l'entropia.
+											3. Caratteristiche Chiave:
+												-Natura Non Lineare: A differenza della regressione lineare, gli alberi possono catturare relazioni complesse e non lineari tra le variabili senza dover trasformare i dati.
+												-Interpretabilità (White Box): È uno dei pochi modelli "scatola bianca". Puoi visualizzare l'albero e capire esattamente perché è stata presa una certa decisione.
+												-L'albero di decisione ha un difetto critico: è estremamente avido (greedy).:
+													- Overfitting: Un albero lasciato crescere senza limiti continuerà a creare rami finché non avrà isolato ogni singola osservazione del training set. Questo lo rende perfetto sui dati di addestramento ma pessimo su dati nuovi (alta varianza).
+													- Instabilità: Piccole variazioni nei dati possono portare alla creazione di un albero completamente diverso.
+													- Soluzioni: Il Pruning (Potatura): - Pre-pruning: Si imposta un limite alla profondità massima dell'albero o un numero minimo di campioni per nodo prima ancora di iniziare.
+																						- Post-pruning: Si lascia crescere l'albero e poi si rimuovono i rami che non aggiungono un potere predittivo significativo.
+
+
+-RANDOM FOREST: è un algoritmo di apprendimento automatico supervisionato che eccelle sia nella classificazione che nella regressione. È un modello di tipo ensemble, il che significa che non si affida a un singolo predittore,
+				ma aggrega le previsioni di molti modelli più semplici, in questo caso, gli Alberi di Decisione (Decision Trees).
+				L'intuizione centrale è che un gran numero di predittori imperfetti e non correlati (gli alberi) può superare in accuratezza un singolo predittore molto complesso, grazie al principio di diversità e mediazione degli errori.
+				1. La Filosofia Ensemble: Bagging. Random Forest utilizza una tecnica chiamata Bagging (Bootstrap Aggregating):
+				   -Bootstrap: Durante la fase di addestramento, il Random Forest crea molteplici training set (sottoinsiemi) per i suoi alberi, campionando in modo casuale e con ripetizione (ricampionamento) dal training set originale.
+				      -Questo assicura che ciascun albero sia addestrato su un dataset leggermente diverso, promuovendo la diversità tra i modelli.
+				   -Aggregating: Una volta addestrati tutti gli alberi:
+				      -Per la Classificazione, la previsione finale è determinata tramite voto a maggioranza (la classe scelta dal maggior numero di alberi).
+					  -er la Regressione, la previsione finale è la media dei risultati prodotti da ciascun albero.
+				2. La "casuale" nel nome "Random Forest" deriva dalle due fonti di casualità introdotte per garantire l'indipendenza degli alberi:
+					-Campionamento delle Osservazioni (Bagging)
+					-Campionamento delle Feature (Spitting Casuale): Ad ogni split (suddivisione) di un nodo in un albero, non viene considerata la totalità delle feature disponibili, ma solo un sottoinsieme casuale di esse
+						Questo è cruciale: se ci fosse una feature molto forte (ad esempio, il prezzo di una casa), senza questa casualità, tutti gli alberi tenderebbero a scegliere quella feature per il primo split,
+						rendendoli di fatto identici e vanificando lo scopo dell'ensemble. La restrizione delle feature forza gli alberi a trovare pattern alternativi e a specializzarsi in modo diverso.
+				3.  -Riduzione dell'Overfitting: Gli alberi di decisione singoli sono molto inclini all'overfitting. Aggregando le previsioni di alberi diversi e non correlati, il Random Forest riduce significativamente la varianza del modello senza aumentare troppo il bias, ottenendo ottime capacità di generalizzazione.
+				    -Robustezza e Scalabilità: È un algoritmo robusto contro il rumore e gli outlier e può gestire set di dati su larga scala con elevata dimensionalità.
+					-Misurazione dell'Importanza delle Feature: Random Forest fornisce in modo nativo una misura di quanto ciascuna feature è stata utile nel ridurre l'impurità (o l'errore) media su tutti gli alberi, offrendo una stima affidabile dell'importanza delle feature.
+				4. Out-Of-Bag (OOB) Error:Durante il Bootstrap, circa un terzo delle osservazioni del training set originale non viene selezionato per la costruzione di un particolare albero.
+					-Queste osservazioni non selezionate sono chiamate dati Out-Of-Bag (OOB) per quell'albero.
+					 I dati OOB possono essere utilizzati per valutare le prestazioni del modello (errore OOB) senza la necessità di un validation set separato. Ogni albero predice la classe o il valore delle sue osservazioni OOB. L'errore OOB è la media di tutte queste previsioni.
+
+-ROTATION FOREST & PCA (Principal Component Analysis): La Rotation Forest è un algoritmo ensemble di alberi di decisione progettato per essere più accurato della Random Forest, specialmente con dati numerici continui (come le serie temporali). La sua strategia non è "nascondere" i dati, ma ruotarne la prospettiva per rendere le classi più facili da separare.
+					1. Il cuore del processo: La PCA: La PCA (Principal Component Analysis) è lo strumento matematico usato per questa rotazione. Ecco cosa fa in breve:
+						- trova quali sono le variabili/fetures che distinguono meglio le classi
+						- calcola un "nuovo asse cartesiano" al netto delle variabili/features meno distintive che si basano solo su quelle piu distintive trovate
+					2. Come funziona la Rotation Forest, L'algoritmo costruisce ogni albero della foresta seguendo questi passaggi:
+						- Scomposizione: Le feature del dataset originale vengono divise casualmente in piccoli gruppi (es. gruppi di 3 feature).
+						- Trasformazione (Rotazione): Per ogni gruppetto, si applica la PCA. Questo estrae le caratteristiche dominanti di quel sottoinsieme. (trasformazioni lineari (rotazioni) dello spazio delle feature.)
+						- Ricomposizione: Si rimettono insieme tutti i risultati della PCA per creare un nuovo dataset "ruotato" che ha lo stesso numero di colonne dell'originale, ma con valori trasformati.
+						- Addestramento: L'albero di decisione viene addestrato su questo dataset ruotato.
+					3. Perché è così efficace?
+						- Diversità degli Alberi: Poiché i gruppi di feature sono scelti a caso, ogni albero vede una "rotazione" diversa dei dati, rendendo l'ensemble molto variegato.
+						- Splitting facilitato: Gli alberi di decisione fanno fatica a tagliare i dati "in diagonale". La PCA ruota i dati in modo che le distinzioni tra le classi siano parallele agli assi, permettendo all'albero di trovare la soluzione con meno passaggi.
+						- Precisione: A differenza della Random Forest che scarta alcune feature, la Rotation Forest le usa tutte (anche se trasformate), conservando più informazione.
+
+- linear classifiers: Un classificatore lineare fa una decisione basata su una combinazione lineare delle features.
+	score = w1*x1‚ + w2*x2 + ... + wn*xn + b
+	x1, x2, ..., xn = features (caratteristiche dell'input)
+	w1, w2, ..., wn = pesi (quanto è importante ogni feature)
+	b = bias (termine di aggiustamento)
+
+	lo score è una combinazione lineare dei pesi * features, in base allo score si distinguono diverse categorie
+	è il classificatore a effettuare la decisione basata sugli score
+
+- SHAPELET: quindi un pezzo dell'insieme della serie temporale,
+			ad esempio in deep learning, distinzione di numeri in immagini, sappiamo che il numero 9 è formato dagli shaplet ° + |
+
+- PATTERN LOCALI: I pattern locali sono le forme o i motivi ricorrenti che si manifestano in brevi sottosequenze di una serie temporale
+
+- DISCRETIZZAZIONE:l'atto di convertire una variabile continua in una variabile discreta suddividendo il suo intervallo di valori in un numero finito di intervalli o "bin".
+					Nel BOP: La discretizzazione trasforma i valori numerici (che siano i valori originali, i valori PAA o i coefficienti di Fourier) in simboli (le "lettere" dell'alfabeto)
+
+- PIECEWISE AGGREGATE APPROXIMATION (PAA):È una tecnica di riduzione della dimensionalità spesso utilizzata come fase preliminare nella simbolizzazione (in particolare prima di SAX)
+										  Suddivide una sottosequenza di lunghezza w in un numero p più piccolo di segmenti di uguale dimensione.
+										  Per ogni segmento, PAA calcola la media aritmetica dei valori in quel segmento.Risultato: Una sottosequenza di w punti viene ridotta a un vettore di p valori medi.
+										  Si perde dettaglio, ma si cattura la forma generale del pattern locale.
+
+- kernels: Un kernel è come un "modello da ricercare" o un "pattern detector".
+	un kernel effettua un operazione di CONVOLUZIONE, scorre lungo la time series e effettua prodotti scalari es:
+
+	Time Series: [a, b, c, d, e, f]
+	Kernel:      [x, y, z]          //come un set di pesi che servono per scoprire pattern (vengono applicati a sottoserie)
+
+	Risultato[0] = a*x + b*y + c*z  //applicazione del kernel alle sottoserie, sostituendo letter con numeri avremmo
+	Risultato[1] = b*x + c*y + d*z  //prodotti scalari, es se stiamo cercando un picco potremmo prendere il prodotto scalare maggiore
+	Risultato[2] = c*x + d*y + e*z
+
+- FEATURE MAP: È il vettore di valori generato applicando un kernel alla serie:
+			   per ogni posizione della serie si calcola un prodotto scalare tra kernel e finestra locale.
+
+- CONVOLUTIONAL NEURAL NETORKS (CNN): hanno avuto enorme successo nella classificazione delle immagini, e molti studi hanno osservato che
+		la stessa efficacia può essere trasferita alle serie temporali, che mantengono la stessa struttura delle immagini ma con una dimensione in meno.
+
+	Le CNN rappresentano un approccio diverso rispetto ai metodi classici per il time series classification:
+		invece di basarsi su rappresentazioni definite a priori, lasciano che la rete impari automaticamente quali pattern sono rilevanti per distinguere le classi.
+	Il cuore delle CNN è il kernel (o filtro), un piccolo vettore di pesi che scorre sulla serie temporale.
+		Durante lo scorrimento, il kernel calcola un prodotto scalare locale con l’input.
+		Il risultato di questi prodotti scalari forma una feature map, che indica quanto il pattern del kernel è presente nei vari punti della serie.
+
+	I kernel hanno alcuni parametri fondamentali:
+		size (lunghezza): quanti punti della serie osserva il kernel in una volta
+		weights e bias: valori appresi dalla rete durante il training
+		dilation: allarga la distanza tra i punti su cui agisce il kernel, permettendo di catturare pattern più lunghi o dilatati
+		padding: aggiunge valori (di solito zero) ai bordi per consentire al kernel di allinearsi anche all’inizio e alla fine dell’input
+
+- RANDOM CONVOLUTIONAL KERNELS:
+	I kernel convoluzionali casuali sono kernel generati senza apprendimento e possono funzionare efficacemente come trasformazione di feature,
+		specialmente quando i dati sono pochi o l’apprendimento è difficile.
+	L’uso di molti kernel casuali e la loro variazione (lunghezza, dilation, padding, pesi, bias) può produrre un insieme ricco di feature utili per la classificazione.
+	Esiste una connessione teorica e pratica tra queste trasformazioni casuali e i metodi di approssimazione dei kernel (Rahimi & Recht), così come con specifici kernel per stringhe o cross-correlation.
+	Alcuni lavori imparano kernel in modo non supervisionato; altri si affidano a feature estratte da kernel casuali e poi a classificatori semplici (SVM, regressione lineare).
+	ROCKET sfrutta tutte le proprietà dell’architettura del kernel (varietà di lunghezze, dilatazioni, padding, ecc.) e un efficace step di estrazione delle feature
+		per ottenere prestazioni di livello con molto meno costo computazionale rispetto ai metodi che addestrano intensamente kernel o modelli profondi.
+
+- ROCKET: quindi in parole povere rocket prende la serie temporale, ci applica i random convolutional kernel,
+	i risultati sono le features per addestrare un classificatore lineare
+
+	tipicamente gli approci di time series classification si concentravano su una singola feature come frequenza o varianza del segnale
+		o la presenza di sottoserie discriminative (shapelet)
+
+	Idea centrale: ROCKET crea moltissimi kernel casuali (diverse lunghezze, dilatazioni, padding, pesi), convolge le serie e costruisce un vettore di feature sintetiche (max, PPV, …).
+		Poi addestra un classificatore lineare su queste feature.
+	Perché è veloce: non c’è training iterativo dei pesi dei kernel -> grande risparmio di tempo; le convoluzioni sono efficienti; il classificatore è semplice e veloce (ridge/logistic).
+	Perché funziona bene su dataset piccoli: evita l’apprendimento rumoroso e l’overfitting dei pesi,
+		mentre la grande quantità e varietà di kernel crea uno spazio feature ricco in cui anche un classificatore lineare può separare le classi.
+	Tradeoff: più kernel -> migliore accuratezza ma più tempo (complessità lineare in k). Nella pratica anche valori grandi (es. 10k) rimangono computazionalmente accettabili con implementazioni ottimizzate.
+
+	ROCKET genera tantissimi kernel convoluzionali randomizzati.
+		Per ogni kernel sceglie:
+			-Lunghezza ? 7, 9 o 11 (casuale)
+			-Pesi: da N(0,1), poi centrati a zero
+			-Bias: U(–1, 1)
+			-Dilatazione: 2^x, con x uniforme in [0, A], così può vedere pattern a scale diverse
+			-Padding: usato o no (50% probabilità)
+
+			Non usa ReLU, stride = 1.
+
+	Questa enorme varietà permette di trasformare la serie in uno spazio di feature ricco.
+	Poi un classificatore lineare (ridge / logistic regression) impara a separare le classi usando queste feature.
+	Risultato: accuratezza altissima a costo computazionale bassissimo.
+
+	TRASFORMAZIONE DELLE SERIE: ROCKET applica ogni kernel random alla serie temporale, producendo una feature map tramite una convoluzione (può includere dilatazione per captare pattern a scale differenti).
+		Da ogni feature map estrae solo due numeri, ma estremamente informativi:
+			1- Max -> “forza del pattern”:
+				Il valore massimo nella feature map misura quanto fortemente il kernel “matcha” la serie in almeno un punto.
+				È una forma di global max pooling, che: cattura la presenza intensa del pattern del kernel
+														è invariante alla traslazione (non importa dove appare il pattern)
+														segnala se esiste almeno un segmento della serie molto simile al kernel
+				È quindi una misura di intensità del match.
+
+			2- PPV (Proportion of Positive Values) -> “frequenza del pattern”
+				PPV è la proporzione di valori positivi nella feature map.
+				Misura quanto spesso il kernel matcha la serie, non solo quanto forte.
+					cattura la ripetitività del pattern
+					riflette la presenza diffusa anziché un singolo picco
+					è molto più informativo della media o dell'average pooling
+					migliora notevolmente l'accuratezza del modello
+				È quindi una misura di quanto il pattern è presente lungo tutta la serie.
+
+		Numero di feature: Con k=10.000 kernel, ROCKET produce 20.000 feature per serie temporale (2 per ogni kernel: max + PPV).
+		Modello finale: Anche se il numero di feature può essere enorme rispetto al numero di esempi, un modello lineare regolarizzato (come Ridge o Logistic Regression):
+							raggiunge alta accuratezza
+							si addestra molto velocemente
+							generalizza molto bene nonostante l’alto numero di feature
+
+	CLASSIFICATORE: Le feature generate da ROCKET possono essere usate con qualsiasi classificatore, ma i migliori risultati si ottengono con classificatori lineari,
+					perché sono in grado di sfruttare poche informazioni da un numero enorme di feature.
+
+		Logistic Regression: ROCKET può essere usato con logistic regression e stochastic gradient descent.
+			Questa combinazione è ideale per dataset molto grandi, perché:
+				l’addestramento è rapido,
+				il costo di memoria è fisso (dipende dal minibatch),
+				è possibile calcolare la trasformazione ROCKET man mano sui minibatch.
+
+		Ridge Regression (L2): Per tutti i dataset UCR usano invece ridge regression (uno-vs-rest).
+			È preferita quando le feature sono molte più degli esempi, cosa tipica in ROCKET.
+			I vantaggi:
+				la regolarizzazione L2 previene overfitting e instabilità dell’ottimizzazione,
+				usa generalized cross-validation per scegliere rapidamente il parametro di regolarizzazione,
+				è molto più veloce della logistic regression sui dataset piccoli,
+				mantiene comunque alta accuratezza.
+
+									pillole: Pooling: operazione che riassume una finestra o l'intera serie (max, average).
+												Global pooling: riassume l’intero output del kernel in un singolo valore.
+												Perché importante: rende il modello invariante alla posizione del pattern.
+											 Warping: deformazioni temporali (pattern comparsi più veloci, più lenti, spostati).
+										ROCKET: usa kernel casuali + global max pooling per estrarre features robuste alla posizione e parzialmente al warping.
+
+
+-WEASEL: Bag-of-Patterns (BOP): Un Approccio di Ingegneria delle Feature per Serie Temporali
+			sviluppata per la Classificazione delle Serie Temporali (TSC). Il suo obiettivo primario è superare le limitazioni dei metodi basati sulla distanza
+			(come $k$-NN con Dynamic Time Warping, DTW) trasformando la serie temporale a valori reali in una rappresentazione discreta e ad alta dimensionalità basata sulla frequenza dei pattern locali.
+			Questo approccio si fonda sul principio della rappresentazione basata sulla frequenza, ereditata dal modello Bag-of-Words (BoW) utilizzato nell'elaborazione del linguaggio naturale (NLP)
+			3 fasi:
+			1-La Fase di Sottocampionamento e Segmentazione: scomposizione della serie temporale T di lunghezza N in un insieme di sottosequenze (o segmenti).
+				- Si applica una finestra scorrevole (sliding window) di lunghezza w e step s su tutta la serie temporale.
+				- Si ottiene un insieme S = {s_1, s_2,..., s_M} di M sottosequenze locali, dove ogni s_i è un vettore di w valori reali.
+				- Le sottosequenze catturano i micro-pattern (le "forme") che si manifestano in brevi intervalli temporali, assumendo che la sequenza temporale locale sia la chiave per la discriminazione tra le classi.
+			2-imbolizzazione e Generazione di "Parole": i dati continui vengono trasformati in simboli discreti, generando il vocabolario del bag.
+				- Trasformare ogni sottosequenza s_i in un'equivalente parola simbolica w_i formata da una sequenza di "lettere" o simboli discreti.
+				- Tecniche Avanzate:
+					- Simbolic Aggregate approXimation (SAX): È una delle prime e più semplici tecniche. Prima effettua una Piecewise Aggregate Approximation (PAA) per ridurre la dimensionalità della sottosequenza,
+					  poi discretizza i valori PA by assegnando simboli in base a intervalli definiti dalla distribuzione normale (z-normalization) della serie temporale.
+					- Symbolic Fourier Approximation (SFA): Utilizzata in algoritmi più recenti (come WEASEL). SFA è preferita perché è più robusta al rumore e più potente nella discriminazione delle feature.
+					  Applica la Discrete Fourier Transform (DFT) alla sottosequenza, mantiene solo i primi $k$ coefficienti di Fourier (che rappresentano lo spettro a bassa frequenza, cioè la forma dominante) e li discretizza in simboli tramite un processo di binning.
+				- L'unione di tutte le parole simboliche uniche generate da tutte le sottosequenze di training costituisce il vocabolario
+			3-Costruzione dell'Istogramma (Il "Bag"):
+				- L'ultima fase è la creazione della rappresentazione finale in feature vector per la classificazione.
+					- Per ogni serie temporale T, si conta la frequenza di ogni parola simbolica w nel vocabolario che appare tra le sue sottosequenze.
+					- Numerosity Reduction (Opzionale): Spesso si applica la riduzione della numerosità per mitigare la potenziale distorsione causata da un pattern che si ripete in modo eccessivo e immediatamente consecutivo a causa della sovrapposizione delle finestre scorrevoli.
+					  Si conta l'occorrenza di una parola solo se è diversa dalla parola immediatamente precedente.
+					- Vettore di Feature: Ogni serie temporale T è ora rappresentata da un vettore di frequenze v_T, dove ogni componente v_T[i] è il conteggio normalizzato o non normalizzato della parola w_i appartenente al vocabolario
+			4-Classificazione:
+				- Il vettore di feature $\mathbf{v}_T$ è ora pronto per essere utilizzato da qualsiasi classificatore standard, come:
+					- Support Vector Machines (SVM)
+					- Regressione Logistica
+					- Random Forest
+		SFA:Symbolic Fourier Approximation, è un processo a tre stadi per trasformare le sottosequenze temporali in pattern simbolici:
+			1. Normalizzazione: La finestra viene normalizzata (deviazione standard = 1) per assicurare l'invarianza all'ampiezza e ignorare le differenze di scala.
+			2. Filtraggio e Riduzione: Viene applicata la Trasformata di Fourier Troncata per ridurre la dimensionalità e agire come un filtro passa-basso, eliminando il rumore ad alta frequenza e isolando la forma strutturale della sottosequenza (coefficienti a bassa frequenza).
+			3. Simbolizzazione: I coefficienti filtrati vengono discretizzati (binning) in un alfabeto di dimensione fissa c, generando una parola simbolica che rappresenta il pattern locale.
+
+		CONTESTO DI WEASEL: sviluppato per affrontare le sfide del mondo reale (come nelle smart grid): -Invarianza: Gestire le lunghezze variabili e l'offset (posizione temporale) dei pattern.
+																										-Robustezza: Resistere al rumore e alle distorsioni dei sensori.
+																										-Scalabilità: Operare su serie temporali lunghe e dataset voluminosi.
+																										-Discriminazione: Identificare i pattern caratteristici sconosciuti scartando quelli irrilevanti.
+				Concettualmente, WEASEL si basa sul modello Bag-of-Patterns (BOP) introdotto dall'algoritmo BOSS, implementando tuttavia approcci e miglioramenti innovativi per risolvere in modo più efficace i problemi sopra elencati.
+			Innovazioni:
+				-Generazione Feature Discriminativa: USA ANOVA F-test sui coefficienti di Fourier e Information Gain Binning per scegliere solo i pattern e i breakpoints che massimizzano la separazione di classe.
+							obbiettivo: Generare parole simboliche che siano intrinsecamente legate alla classe.
+				-Co-occurring Words: Inclusione dei Bigrammi (coppie di parole consecutive).
+							obbiettivo: Codificare l'ordine locale (mitigare la perdita d'ordine del BOP).
+				-Finestre a Lunghezza Variabile: Unisce pattern estratti da un range di lunghezze di finestra in un unico feature vector.
+							obbiettivo: Catturare pattern di diverse scale temporali.
+				-Selezione Feature: Utilizzo aggressivo del Test Chi-Quadrato sul Bag-of-Patterns finale.
+							obbiettivo: Ridurre la dimensionalità, mantenere solo le feature più discriminative e irrobustire il modello.
+		La costruzione del feature vector di WEASEL (che include bigrammi e n finestre variabili) causa un'esplosione esponenziale della dimensionalità (O(c^2 * c^2 * n)$), rendendo lo spazio intratttabile.
+		Per risolvere il problema, WEASEL usa una duplice strategia:
+			- Selezione delle Feature (chi^2): Applica il test Chi-Quado per filtrare aggressivamente le feature irrilevanti. Vengono mantenute solo le parole (unigrammi/bigrammi) con alti valori chi^2,
+			  che indicano una forte dipendenza statistica dalla classe, riducendo la dimensione del feature vector di un fattore significativo (fino al 70%).
+			- Classificatore Lineare: Utilizza la Regressione Logistica (implementata tramite librerie come liblinear). Questo classificatore, ideale per vettori sparsi ad alta dimensionalità,
+			  è scelto per la sua scalabilità lineare (O(d)), che garantisce una velocità di addestramento e predizione di gran lunga superiore rispetto ai metodi concorrenti a tempo quadratico (es. Shapelet o ensemble).
+		WEASEL supera i limiti della SFA tradizionale (che filtra ciecamente e quantizza senza distinguere le classi) introducendo una Rappresentazione Simbolica Supervisionata in due fasi:
+			1- Approssimazione Discriminativa (ANOVA): Invece di mantenere i coefficienti di bassa frequenza per default, viene applicato il Test F a una via ANOVA a ogni coefficiente di Fourier. Vengono selezionati solo i l coefficienti con il valore F più alto,
+			   garantendo che l'approssimazione sia basata sulle frequenze più significative per la separazione delle classi.
+			2- Quantizzazione Discriminativa (Information Gain): I coefficienti selezionati vengono discretizzati utilizzando l'Information Gain Binning. I breakpoints dei simboli sono scelti in modo da minimizzare l'Entropia di classe in ciascuna partizione,
+			   garantendo che i simboli risultanti siano intrinsecamente discriminativi e abbiano un'occorrenza marcatamente diversa tra le classi.
+			Questo processo genera parole simboliche che massimizzano la separabilità del feature set, migliorando drasticamente la potenza predittiva del modello finale.
+		La Quantizzazione Discriminativa in WEASEL è un processo di binning supervisionato che trasforma i coefficienti di Fourier selezionati in simboli utilizzando la Teoria dell'Informazione.
+		    1- Obiettivo: Trovare i breakpoints che massimizzano la purezza di classe all'interno di ciascun bin risultante.
+			2- Viene utilizzato il Guadagno di Informazione (IG), che misura la riduzione dell'Entropia (disordine di classe) dopo una divisione.
+			3-  L'algoritmo cerca iterativamente il punto di split che produce il massimo IG e ripete il processo in modo ricorsivo sulle partizioni risultanti fino a ottenere il numero fisso di bins (c=4).
+			4- Questo assicura che i simboli (le 'parole') siano creati in modo da separare intrinsecamente le classi (Quantizzazione Discriminativa), superando i limiti del binning non supervisionato come equi-width o equi-depth.
+
+	La Pipeline WEASEL:
+		Input: Un dataset di N serie temporali (TS) etichettate.
+		Iperparametri fissi: Dimensione Alfabeto (c): Fissata a 4 (simboli: a, b, c, d).
+							 Lunghezza Parola (l): Fissata a 4 (si mantengono 4 coefficienti di Fourier).
+							 Range Finestre (w_min a w_max): Tutte le lunghezze di finestra tra 10 e 50 campioni.
+		1: ESTRAZIONE E NORMALIZZAZIONE DELLE FINESTRE: Si applica una finestra scorrevole (sovrapposta o non sovrapposta) e di lunghezza variabile a tutte le TS del dataset di training.
+		                                                Ogni singola finestra (es. la finestra di lunghezza 25 al timestamp 100) viene immediatamente Z-normalizzata (media=0, dev. standard=1) per garantire l'invarianza all'ampiezza.
+		2: GENERAZIONE SUPERVISIONATA DELLE FEATURES (SFA Avanzata): -TRASFORMAZIONE: Per ogni singola finestra normalizzata (di tutte le lunghezze), si calcola la Trasformata di Fourier Discreta (DFT). Questo genera un set di coefficienti (reali e immaginari).
+																	 -SELEZIONE CON ANOVA: Invece di troncare semplicemente i coefficienti ad alta frequenza (filtro cieco), si applica l'ANOVA F-test a tutti i coefficienti disponibili in tutte le finestre.
+																						  L'ANOVA confronta la media di ciascun coefficiente tra la Classe A e la Classe B.
+																						  Se il coefficiente che descrive la classe A ha un valore F elevato, significa che è altamente discriminante tra le due classi.
+																	 -OUTPUT: Vengono selezionati e mantenuti i $l=4$ coefficienti con il valore $F$ più alto. Questi 4 coefficienti diventano i parametri fissi che definiscono la forma (la parola simbolica) di tutte le sottosequenze future.
+																	 -Dopo la selezione con ANOVA, i 4 coefficienti sono ancora valori continui. Dobbiamo discretizzarli in simboli. OBBIETTIVO: Definire i confini dei bins (punti di rottura) per ciascuno dei 4 coefficienti selezionati in modo che il simbolo risultante massimizzi la separazione di classe.
+																	  MECCANISMO:Si applica la ricerca ricorsiva basata sull'Information Gain (IG).
+																				 Per il primo coefficiente, l'algoritmo trova il breakpoint che riduce al massimo l'Entropia (aumenta la purezza) delle due partizioni rispetto alle etichette classe A/classe B.
+																				 Questa ricerca prosegue ricorsivamente fino a trovare i c=4 bins (simboli: a, b, c, d) per quel coefficiente.
+																	  OUTPUT: Vengono definiti i 4 set di breakpoints (uno per ciascuno dei 4 coefficienti selezionati). Questi breakpoints (o confini) sono fissi e vengono usati per trasformare tutte le finestre in parole simboliche.
+		3: COSTRUZIONE DEL FEATURES VECTOR FINALE: GENERAZIONE DELLE PAROLE(UNIGRAMMI E BIGRAMMI):
+													Si ripercorre la pipeline di estrazione, ma questa volta applicando i parametri di simbolizzazione definiti supervisionatamente.
+													SIMBOLIZZAZIONE:Ogni finestra di TS (di qualsiasi lunghezza tra 10 e 50) viene trasformata in una parola simbolica di lunghezza l=4 utilizzando i breakpoints di IG.
+													UNIGRAMMI PONDERATI: Si conta l'occorrenza di questa parola ('adcb') e la si associa alla sua lunghezza di finestra.La feature finale non è solo 'adcb', ma 'adcb-L25' (la combinazione parola + lunghezza è la feature).
+													BIGRAMMI:Si considerano anche le coppie di parole consecutive estratte dalla TS.Se la parola successiva alla 'adcb-L25' è 'bcaa-L25', il bigramma 'adcb-L25_bcaa-L25' viene anch'esso contato come feature separata.
+													FILTRAGGIO FINALE CON CHI-QUADRO: Il feature vector risultante (un unico Bag-of-Patterns) è estremamente grande a causa dei bigrammi e delle molteplici lunghezze di finestra.
+													                                  - Si applica il Test Chi-Quadrato a ogni singola feature (unigrammi e bigrammi di tutte le lunghezze).
+																					  - Vengono mantenute solo le feature che mostrano una forte dipendenza statistica dalla classe (alto valore chi^2).
+																					     Esempio: Se la feature 'adcb-L25' appare quasi esclusivamente nei suoni di Campana (Classe A), il suo valore chi^2 sarà molto alto, e sarà mantenuta.
+																					  - Output: Un vettore di feature snello (ridotto dal 30% al 70%) ma altamente discriminativo e pronto per l'addestramento.
+							CLASSIFICAZIONE: ADDESTRAMENTO CLASSIFICATORE: Output: Un vettore di feature snello (ridotto dal 30% al 70%) ma altamente discriminativo e pronto per l'addestramento.
+																			Scelta del Classificatore: Si utilizza una Regressione Logistica (un classificatore lineare) per sfruttare la sua scalabilità lineare con il numero di feature.
+																			Addestramento: La Regressione Logistica apprende un vettore di pesi che assegna pesi elevati e positivi alle feature associate alla Classe A (Campana) e pesi negativi alle feature associate alla Classe B (Fischio), basandosi sui conteggi $\chi^2$-filtrati.
+	MIO RIASSUNTO:prima di tutto prendiamo le ts etichettate che servono per addestramento, vabbe abbiamo parametri fissi come hai detto t che sono dimensione alfabeto range finestre variabili(anche piu di max 50 penso) e lunghezza parola.
+					primo passo è applicare le finestre di lunghezza variabile
+					ad ogni finestra viene applicato la trasformata di fourier per distinguere i singoli segnali che compongono il segnale originale della serie. poi si fa una pulizia dei coefficienti di fourier con l'anova test per diminuire le feature a solo quelle altamente discriminanti.
+					usiamo l'information gain per separare i diversi coefficienti di fourier nel modo migliore (ig maggiore) e viene assegnato un valore di alfabeto ad ogni segmento creato.
+					si crea un istogramma delle occorrenze dei unigrammi e bigrmmi di parole che abbiamo crato al passo precedente, tenendo conto anche di lunghezze diverse. si usa il test del chi quadro ad ogni feature nell'istogramma per filtrare quelle che sono altamente discriminanti per una classe. completando cosi il nostro bag of patterns da dare poi in pasto ad un classificatore lineare logistic regression.
+
+
+
+
+RANDOM INTERVAL CLASSIFIER: nella su implementazione standard utilizza TSF (Time Series Forest Classifier): si creano 3 tipi di feature, media, deviazione standard e pendenza (slope) ottenuta dalla regressione lineare dei minimi quadrati sul set di punti temporali nell'intervallo. Cattura il trend (crescita o decrescita) del segmento.
+							problema: troppi intervalli possibili; TSF adotta una strategia di campionamento casuale (simile a Random Forest) che riduce lo spazio di feature considerato a O(M) per ogni nodo dell'albero, rendendo il metodo estremamente più efficiente.
+									CRITERI DI SPLITTING PER COSTRUIRE L'ALBERO:
+										-Un nodo viene suddiviso in base a un test su una feature d'intervallo f_k(t_1, t_2) <= tau, dove tau è una soglia. Le istanze che soddisfano la condizione vanno al nodo figlio sinistro, le altre a destra.
+										-Selezione della Soglia tau: Viene selezionato un numero fisso (k, es. k=20) di soglie candidate dividendo l'intervallo tra il valore minimo e massimo della feature in intervalli di uguale ampiezza. Questo evita l'ordinamento e riduce la complessità
+										-Funzione di Valutazione dello Split (Entrance Gain):TSF combina due metriche:
+											-Guadagno di Entropia:ovvero l'aumento di purezza ottenuta dallo split
+											-Margine: è la distanza minima tra la soglia tau e il valore della feature per una qualsiasi istanza nel nodo.
+														Quando ci sono molti split candidati che producono lo stesso guadagno di entropia (delta entropy), si verifica un "legame" (tie). Il Margine aiuta a rompere questi legami, preferendo le soglie che sono più distanti dai valori dei dati reali, il che aumenta la robustezza dello split.
+											-Guadagno di Ingresso (Entrance Gain, E): E = Delta Entropy + alpha * Margin. alpha è un peso molto piccolo il cui unico scopo è permettere al Margine di agire solo quando Delta Entropy è identico per più split. Lo split con il massimo E viene selezionato.
+											-Criterio Finale di Selezione dello Split (Gestione delle Scale): Se feature di tipi diversi (Media vs. Pendenza) hanno scale molto diverse, il Margine e l'Entrance Gain potrebbero essere distorti.
+												-Strategia TSF: Invece di confrontare direttamente tutti gli E, l'algoritmo trova il miglior split per ogni tipo di feature f_k.
+												-Il confronto finale tra i migliori split di f_1, f_2, f_3 viene fatto usando solo Delta Entropy. Se i migliori split di tipi diversi hanno lo stesso Delta Entropy massimo, si seleziona uno di essi casualmente.
+									COSTRUZIONE DELL'ALBERO: La costruzione di un albero di serie temporali (Time Series Tree) è ricorsiva, top-down, come negli alberi decisionali standard, ma utilizza l'Entrance Gain come criterio per la suddivisione ottimale dei nodi.
+															 Viene adottata la strategia di campionamento casuale impiegata nelle Random Forest (RF).
+															 Mentre una RF campiona casualmente radice di p delle p feature totali in un nodo, il TSF introduce casualità in due modi per gestire lo spazio delle serie temporali: 1. Campiona casualmente O(radice di M) lunghezze di intervalli
+																il numero di feature (intervalli) considerate a ogni nodo si riduce drasticamente a soli O(M)
+																2. Campiona casualmente O(radice di M) posizioni di inizio (punti di partenza).
+															 NODO FOGLIA:  (il nodo diventa una foglia) se non c'è più guadagno nell'entropia ($\Delta Entropy = 0$), il che accade se tutte le istanze appartengono alla stessa classe (nodo puro) o se tutte le feature d'intervallo hanno lo stesso valore (impossibile trovare uno split).
+															 Definizione di TSF: Una Foresta di Serie Temporali (TSF) è semplicemente una collezione di questi alberi. La previsione finale per una nuova istanza di test è determinata dal voto di maggioranza di tutti gli alberi nella foresta.
+															 Previsione Finale: La classe finale viene scelta in base al voto di maggioranza espresso da tutti gli alberi della foresta.
+									CURVA DI IMPORTANZA TEMPORALE: Questa curva ha lo scopo di individuare quali istanti di tempo e quali feature statistiche (media, deviazione standard, pendenza) sono stati più rilevanti per la classificazione.
+																   1. Il Calcolo dell'Importanza: L'importanza viene quantificata sfruttando il Guadagno di Entropia ($\Delta Entropy$), che è la metrica che misura quanto efficacemente uno split (suddivisione del nodo) riesce a separare le classi.
+																		Per ottenere il punteggio per un singolo momento $t$ nella serie:
+																				-'algoritmo esamina tutti gli split generati da tutti gli alberi della foresta
+																				-Per ogni split che ha utilizzato un intervallo contenente l'istante $t$, il suo $\Delta Entropy$ viene sommato.
+																		Il risultato è un punteggio che evidenzia i momenti temporali che hanno contribuito maggiormente alla pulizia e alla chiarezza delle decisioni di classificazione in tutta la foresta. Poiché il TSF utilizza tre feature, produce tre curve separate (una per ogni feature), mostrando chiaramente se è stata la volatilità (Deviazione Standard), il livello medio (Media) o il trend (Pendenza) a dominare in un dato intervallo.
+										Senza il Margine, un intervallo lungo e uno corto potrebbero entrambi separare perfettamente le classi e ricevere lo stesso alto $\Delta Entropy$. Se l'algoritmo scegliesse l'intervallo lungo, il segnale informativo (il picco di importanza) risulterebbe diluito e meno preciso sulla curva.L'Entrance Gain spinge l'algoritmo a preferire gli split più robusti, che spesso corrispondono a intervalli più brevi e focalizzati sul vero punto di differenza tra le classi.
+
+
+
+
+RANDOM INTERVAL CLASSIFIER: Il Random Interval Classifier è un classificatore "meta-algoritmico" che trasforma un problema di classificazione di serie temporali in un problema di classificazione tabulare classico. Il suo funzionamento si divide in tre fasi principali:1. Il Campionamento degli Intervalli (n_intervals)Invece di analizzare l'intera serie temporale, il RIC estrae un numero predefinito di segmenti casuali. Nella tua configurazione, hai impostato 30 intervalli. Questi frammenti variano per posizione iniziale, lunghezza e dimensione (se la serie fosse multivariata). L'idea è che le informazioni determinanti per distinguere le classi non siano ovunque, ma nascoste in specifiche finestre temporali.2. Il Motore di Estrazione: Catch22 (interval_transformers)Per ogni intervallo estratto, viene applicato il trasformatore Catch22. Questo è l'elemento più sofisticato del tuo modello. Catch22 non calcola semplici medie, ma riassume ogni intervallo in un vettore di 22 numeri (feature).Queste 22 caratteristiche sono state selezionate scientificamente da un pool di oltre 7.000 algoritmi (dal framework hctsa) per rappresentare al meglio la "firma" di una serie temporale. Le categorie di feature estratte da Catch22 includono:Auto-correlazione: Misura se ci sono pattern ripetitivi o ciclici.Distribuzione dei valori: Analizza la simmetria e la dispersione dei dati nell'intervallo.Entropia e Complessità: Calcola quanto il segnale sia caotico o imprevedibile.Stazionarietà: Verifica se le proprietà statistiche cambiano all'interno della finestra.Poiché hai 30 intervalli e per ognuno calcoli 22 feature, ogni serie temporale viene trasformata in una riga di 660 feature totali ($30 \times 22 = 660$).3. L'Estimatore: Random Forest (estimator)Una volta ottenuta questa matrice con 660 colonne, entra in gioco la tua Random Forest con 45 alberi.A differenza della Rotation Forest (default di sktime che applica una rotazione PCA a ogni albero), la tua Random Forest addestra 45 alberi decisionali indipendenti direttamente sulle feature di Catch22. Ogni albero impara a correlare le combinazioni di quelle 660 caratteristiche con la classe di appartenenza (es. "Sano" vs "Malato"). La decisione finale avviene tramite voto di maggioranza tra i 45 alberi.
+
+Z-NORMALIZATION: vogliamo che l'algoritmo si concentri sulla forma del grafico, non sui valori assoluti. Ecco i termini spiegati:Offset Invariance (Invarianza rispetto all'offset/spostamento):Cos'è l'offset: Immagina due elettrocardiogrammi identici, ma uno è traslato più in alto nel grafico perché il sensore era tarato diversamente. Se non correggiamo l'offset, il computer penserà che sono due cose diverse.Come si risolve: Sottraendo la Media ($\mu$). Se sottrai la media a ogni punto della finestra, la serie viene "centrata" sullo zero. Non importa se i valori originali erano 100 o 1000: dopo questa operazione, entrambi i grafici fluttueranno attorno allo 0.Amplitude Invariance (Invarianza rispetto all'ampiezza):Cos'è l'ampiezza: Immagina due serie con la stessa forma, ma una ha picchi altissimi e l'altra picchi minuscoli (una è "più compressa" verticalmente).Come si risolve: Dividendo per la Deviazione Standard ($\sigma$). La deviazione standard misura quanto i dati sono "sparpagliati" lontano dalla media. Dividendo per essa, "normalizziamo" l'escursione termica (o di voltaggio, ecc.). Tutti i picchi avranno ora una scala paragonabile.Z-Normalization (Formula):Per ogni punto $t$ della finestra, il nuovo valore $z$ calcolato è:$$z = \frac{t - \mu}{\sigma}$$Dove $\mu$ è la media della finestra e $\sigma$ è la sua deviazione standard.
+
+BOSS ENSAMBLE/CLASSIFIER:	Fase 1: Estrazione delle Sottosequenze (Windowing)
+									L'algoritmo non analizza la serie temporale per intero. Utilizza una finestra scorrevole di lunghezza $w$ che estrae migliaia di piccoli segmenti. Ogni segmento scorre di un solo punto alla volta, garantendo una sovrapposizione quasi totale ($w-1$) tra segmenti consecutivi. Questo assicura che nessun pattern venga ignorato.
+							Fase 2: Normalizzazione (Z-Normalization) Ogni singolo segmento estratto viene trasformato matematicamente per renderlo confrontabile con gli altri.
+									-Obiettivo: Rendere il classificatore robusto rispetto a variazioni che non cambiano il significato del dato (rumore di scala o di posizionamento).
+									-Invarianza all'offset: Si sottrae la media per centrare il segmento sullo zero (allineamento verticale).
+									-Invarianza all'ampiezza: Si divide per la deviazione standard per uniformare l'altezza dei picchi (scala coerente).
+									-Risultato finale: L'algoritmo studierà solo il "comportamento" (la forma) del segnale, ignorando se il segnale è "più alto" o "più grande" in termini di valori puri.
+
+							Obiettivo della SFA: Convertire segmenti numerici complessi in stringhe di testo (parole) per poterli gestire con algoritmi testuali veloci.
+								1: Approssimazione (Fourier, filtro passa basso): Si scarta la parte del segnale che cambia troppo velocemente (rumore ad alta frequenza). Si scelgono i primi $l$ coefficienti di Fourier (dove $l$ è la lunghezza della parola). Questo definisce la "forma" del segnale.
+								2: Discretizzazione (Alfabeto): I valori ottenuti da Fourier vengono convertiti in lettere usando un alfabeto di dimensione $a$. Questo rende l'algoritmo robusto: piccole variazioni numeriche non cambiano la lettera finale.
+									TRADE OFF:
+										- Parola corta / Alfabeto piccolo: Molta resistenza al rumore, ma si rischia di non distinguere due segnali diversi perché sembrano troppo simili (sotto-approssimazione).
+										- Parola lunga / Alfabeto grande: Molta precisione, ma si rischia di scambiare il rumore per un pattern importante (sovra-approssimazione o overfitting).
+
+							La Trasformazione DFT in BOSS L'obiettivo è passare dal dominio del tempo (sequenza di valori) al dominio della frequenza (sequenza di onde).
+								1. Scomposizione: Ogni finestra di dati viene smontata in una serie di onde sinusoidali.
+								2. Filtraggio Passa-Basso: Si tengono solo i primi $l$ coefficienti. Questo agisce come un filtro che "ammorbidisce" il segnale, eliminando i picchi di rumore troppo rapidi.
+								3. Invarianza: Il primissimo valore ($X_0$) viene spesso eliminato. Poiché rappresenta la media, eliminarlo garantisce che segnali con la stessa forma ma "altezze" diverse vengano visti come identici.
+								4. Numeri Complessi: Nota che ogni coefficiente ha una parte reale e una immaginaria. BOSS deve gestire questi due valori per ogni frequenza (spesso usando la loro ampiezza o concatenandoli).
+
+							Rappresentazione Bag-of-Words:
+								Questa fase trasforma l'intera serie temporale in un unico vettore (istogramma).
+								-Numerosity Reduction: Se due finestre consecutive generano la stessa parola SFA, i duplicati vengono ignorati. Si registra la parola solo quando cambia. Questo evita che le zone statiche del segnale dominino l'istogramma.
+								-Istogramma BOSS: Viene costruito un istogramma che conta le occorrenze di ogni parola SFA trovata nella serie.
+								-Invarianza di Fase: Poiché l'istogramma conta le presenze ma ignora l'ordine temporale delle parole, l'algoritmo riconosce i pattern indipendentemente da quando appaiono nella serie.
+
+							I 4 Parametri Chiave per il Benchmark:
+								1. $w$: Lunghezza della finestra (dimensione dei pattern da cercare).
+								2. $l$: Lunghezza della parola SFA (quanti dettagli della forma tenere).
+								3. $c$: Dimensione dell'alfabeto (quanta precisione nella quantizzazione).
+								4. mean: Flag per attivare/disattivare l'invarianza all'offset.
+
+							La Distanza BOSS: Robustezza per asimmetria Mentre la distanza Euclidea classica confronta due istogrammi in modo rigido, la Distanza BOSS è progettata per gestire dati "sporchi" o incompleti.
+								-Funzionamento: Durante il calcolo della distanza, l'algoritmo ignora tutte le parole SFA che non sono presenti nella serie temporale che stiamo cercando di classificare (la query).
+								-Perché si usa: 1. Resistenza al rumore: Se il rumore crea parole "casuali" nel segnale di addestramento, queste non influenzeranno la classificazione delle nuove query che non contengono quel rumore. 2. Dati estranei: Se una registrazione è più lunga di un'altra o contiene pezzi irrilevanti (es. l'inizio o la fine di un esperimento), queste parti non "penalizzano" la somiglianza tra i cuori pulsanti dei due segnali.
+								-Risultato: BOSS si concentra su ciò che è presente nella query e cerca se quegli stessi pattern esistono nel database, ignorando tutto ciò che la query non mostra.
+
+							Ottimizzazione: Momentary Fourier Transform (MFT) Per rendere BOSS applicabile a dataset reali e grandi, l'autore introduce una tecnica di aggiornamento ricorsivo della trasformata di Fourier.
+								-Concetto chiave: Dato che le finestre mobili sono quasi identiche tra loro (scorrono di un solo punto), ricalcolare la DFT da zero è inefficiente.
+								-Funzionamento: La MFT aggiorna i coefficienti di Fourier della finestra precedente aggiungendo il contributo del nuovo punto ed eliminando quello del punto appena uscito.
+								-Efficienza: * Passa da una complessità quadratica/logaritmica ($O(nw \log w)$) a una lineare rispetto alla lunghezza della serie ($O(nl)$).
+
+							Lo scarto rapido (Lower Bounding) Durante la classificazione, BOSS usa la logica del "colpo d'occhio". Inizia a confrontare due serie usando parole molto corte (bassa risoluzione).
+								Se già così sono troppo diverse tra loro, l'algoritmo capisce subito che non potranno mai essere simili nemmeno guardando i dettagli. Quindi le scarta immediatamente e passa oltre, risparmiando tempo prezioso.
+
+							Come "studia" BOSS:
+								1. Prova tutto: L'algoritmo testa centinaia di lunghezze di finestra (da piccolissime a grandi). Per ogni finestra, prova diverse lunghezze della parola (da molto sfuocata a molto dettagliata).
+								2. Si auto-esamina: Per ogni tentativo, controlla quanto è bravo a classificare i dati che già possiede (usando il metodo leave-one-out).
+								3. Ottimizza il tempo: Grazie ai trucchi visti prima (MFT e raffinamento incrementale), non deve ricalcolare tutto ogni volta. Calcola la versione più dettagliata e poi la "taglia" per testare quelle più semplici.
+								4. Vota il migliore: Alla fine del processo di Fit, BOSS ha una lista di punteggi per ogni combinazione di parametri. Questi punteggi serviranno poi all'Ensemble per decidere quali modelli tenere nel gruppo finale che voterà per le nuove serie sconosciute.
+
+							Come funziona la decisione finale (ENSAMBLE):
+								1. Selezione dei Talenti: Dopo l'addestramento, l'algoritmo non sceglie un solo vincitore. Prende tutti i modelli "bravi quasi quanto il migliore" e scarta quelli mediocri.
+								2. Consultazione: Quando arriva una nuova serie temporale da classificare, questa viene consegnata a tutti i modelli selezionati.
+								3. Il Verdetto: Ogni modello guarda la serie con la sua "lente" (la sua finestra $w$ specifica) e dice la sua. L'etichetta che riceve più voti diventa la risposta ufficiale.
+
+								Il paper suggerisce che se conosci già la dimensione dei pattern (es. sai che un battito dura circa 100 punti), puoi limitare la ricerca delle finestre $w$ vicino a 100, riducendo drasticamente il tempo.
+								L'unità base: È un classificatore 1-NN (Nearest Neighbor) che usa la BOSS Distance (quella asimmetrica) invece della classica Euclidea.
+								La struttura: Non è un singolo classificatore, ma un Ensemble.
+
+SHAPLET:	-VECCHIO METODO: Uno shapelet è una sottosequenza (segmento) estratta da una serie temporale del dataset $T$.
+			-Obiettivo: Rappresentare una "forma" locale caratteristica che permetta di distinguere le classi.
+			-Invarianza: Gli shapelet devono essere normalizzati (indipendentemente dalla serie originale) per essere invarianti a:
+				-Scale: Ampiezza delle oscillazioni.
+				-Offset: Traslazione verticale (valori medi diversi).
+				-Z-normalization (media 0, deviazione standard 1)
+			-Processo di Selezione: Si estraggono tutti i possibili segmenti di tutte le lunghezze comprese tra un range definito ($min$ e $max$). Ogni segmento è un candidato.§
+									Per ogni candidato, si calcola la distanza minima tra esso e ogni serie del dataset (tramite una sliding window).
+									Si assegna un punteggio allo shapelet basandosi su quanto le distanze calcolate riflettano l'appartenenza alle classi.
+									Viene restituito solo lo shapelet (o i top-$k$) con la qualità più alta.
+			-tre colli di bottiglia:
+				1. candidati infiniti: Il numero di sottosequenze è enorme (O(nm^2)).
+				2. Distanza costosa: Calcolare la distanza minima tra uno shapelet e una serie richiede di far scorrere una finestra su tutta la serie (O(ml)).
+				3. Valutazione pesante: L'Information Gain richiede di ordinare le distanze ($O(n \log n)$) e testare ogni possibile punto di split.
+			-Tentativi di ottimizzazione precedenti:
+				-Speed-up matematico: Uso di statistiche pre-calcolate per velocizzare il calcolo della distanza (scambio memoria per velocità). complesso da implementare, consuma troppa RAM
+				-Early Abandon: Fermare il calcolo se lo shapelet sembra promettere male. fatica molto con i problemi multiclasse (più di due etichette).
+
+			-NUOVO METODO: Lo Shapelet Transform (ST) - Il Cambio di Paradigma:
+				Invece di usare gli shapelet in un albero decisionale (vecchio metodo), il paper propone di usarli per una trasformazione dei dati:
+					-Feature Engineering: Il dataset originale di serie temporali viene trasformato in un dataset tabulare.
+					-Struttura Dati: Ogni colonna del nuovo dataset rappresenta la distanza di una serie da uno specifico shapelet estratto.
+					-Vantaggio Architetturale: Una volta trasformati i dati, è possibile applicare qualsiasi classificatore (es. Random Forest, SVM) e non solo alberi singoli.
+					-Mentre gli alberi usano l'Information Gain (split binari), la trasformazione permette l'uso di test statistici più veloci e adatti al multiclasse:
+						-ANOVA: Per confrontare le medie delle distanze tra le classi.
+						-Kruskal-Wallis / Mood’s Median: Test non parametrici per le differenze tra mediane.
+				-Obiettivo: Velocizzare il calcolo e gestire meglio i problemi con > 2 classi.
+				-Non cerca più uno "split point" (soglia), ma valuta la differenza tra distribuzioni di distanze.
+				-Test di Kruskal-Wallis (KW):
+					-Test statistico non parametrico basato sui ranghi.
+					-Invece dei valori assoluti, ordina le distanze e controlla se i ranghi medi delle diverse classi sono significativamente diversi.
+					-Vantaggi: 1. Robusto contro i valori anomali (outliers). 2. Gestisce nativamente problemi multiclasse. 3. Non richiede l'ipotesi che i dati seguano una distribuzione normale.
+				STATISTICA F (ANOVA)
+					-Logica: Rapporto tra varianza tra le classi e varianza entro le classi.
+					-Criterio di Qualità: Uno shapelet è ottimo se le distanze dei membri della stessa classe sono simili tra loro (piccola varianza interna) ma molto diverse dalle distanze delle altre classi (grande varianza tra gruppi).
+					-Vantaggio: Molto più veloce dell'Information Gain (IG) e ottimo per gestire più classi contemporaneamente.
+				MOOD’S MEDIAN (MM)
+					-Logica: Divide le distanze in due gruppi basandosi sul mediano globale e usa una tabella di contingenza per vedere se le classi sono distribuite equamente o meno.
+					-Vantaggio estremo: Non richiede l'ordinamento dei dati (O(n log n)), ma solo il calcolo del mediano (O(n)). È la misura computazionalmente più "economica".
+				 Le 3 Fasi della ST:
+					1. Estrazione: Ricerca dei k migliori shapelet nel dataset.
+					2. Filtro/Clustering: Riduzione del numero di shapelet per migliorare l'interpretabilità e ridurre la ridondanza.
+					3. Mapping: Generazione della matrice delle distanze (ogni riga è una serie, ogni colonna è la distanza da uno degli shapelet scelti).
+				L'Algoritmo : Shapelet Cached Selection
+					-Input: Dataset T, lunghezze min/max, numero di shapelet desiderati k.
+					-Caching Intelligente: Invece di cercare il "migliore di sempre" subito, estrae i migliori da ogni serie singola e poi esegue un "merge" nella classifica globale.
+					-Rimozione Auto-somiglianza (Self-similarity): * Regola: Se due shapelet provengono dalla stessa serie e si sovrappongono nel tempo, sono considerati "lo stesso segnale".
+						-Azione: Viene conservato solo quello con la qualità (es. F-stat) più alta.
+						-Importanza: Fondamentale per garantire che i $k$ shapelet siano diversificati e rappresentino forme diverse, non piccoli spostamenti della stessa forma.
+				Stima Automatica delle Lunghezze
+					-Problema: Come decidere quanto devono essere lunghi gli shapelet?
+					-Soluzione: Un'analisi preliminare su un piccolo sotto-campione (10 serie) per identificare le lunghezze più promettenti (usando il 25° e 75° percentile).
+				La Matrice di Trasformazione (Algorithm 5)
+					-Input: Serie temporali originali + Set di $k$ shapelet selezionati.
+					-Processo: Ogni cella della nuova matrice è la distanza minima tra lo shapelet della colonna j e la serie della riga i.
+					-Indipendenza: La selezione degli shapelet avviene solo sul training set per evitare bias (overfitting). Il test set viene trasformato usando gli shapelet trovati nel training.
+				Selezione e Clustering (La "Pulizia")
+					-Numero di Shapelet (k): Di default viene suggerito k = n/2 (dove n è la lunghezza della serie).
+					-Clustering Gerarchico:
+						-Perché: Rimuove la ridondanza (shapelet simili estratti da serie diverse).
+						-Metodo: Raggruppa shapelet vicini nello "spazio delle forme" e mantiene solo il rappresentante migliore di ogni gruppo.
+						-Effetto: Migliora l'interpretabilità (meno "rumore" visivo) e può prevenire l'overfitting del classificatore finale.
+		1. La Critica all'Information Gain (IG) nel Multiclasse
+			Nel paper del 2014, la qualità di uno shapelet era misurata con l'Information Gain. Bostrom dimostra che questo è un errore nei problemi complessi:
+			Il problema della diluizione: L'IG cerca un punto di divisione globale. Se uno shapelet è perfetto per distinguere la classe A dalla classe B, ma le classi C, D ed E hanno distanze casuali rispetto a esso, l'IG risulterà bassissimo.
+			La soluzione di Bostrom: Introdurre una valutazione binaria gerarchica. Invece di una misura di qualità "tutti contro tutti", lo shapelet viene valutato sulla sua capacità di separare specifiche combinazioni di classi.
+		2. Le Strategie di Selezione: 1-vs-1 e 1-vs-All
+			Questa è la parte più importante del paper. Per costruire il set finale di $k$ shapelet, l'algoritmo non cerca più i "migliori in assoluto", ma i migliori per ogni confronto:
+				-One-vs-One (1v1): Se hai 3 classi (A, B, C), l'algoritmo cerca shapelet che distinguano (A contro B), (A contro C) e (B contro C).
+				-One-vs-All (1vAll): Cerca shapelet che distinguano (A contro [B+C]), (B contro [A+C]), ecc.
+				-Risultato: Il dataset trasformato finale conterrà colonne (distanze) specializzate nel distinguere ogni possibile confine tra le classi. Questo aumenta drasticamente l'accuratezza nei dataset multiclasse.
+		3. Class Balancing (Bilanciamento delle Classi)
+			Bostrom nota che nei dataset reali alcune classi sono molto più frequenti di altre.
+			Il rischio: Senza correzione, l'algoritmo sceglierebbe solo shapelet che descrivono la classe maggioritaria, ignorando i dettagli delle classi rare.
+			L'innovazione: Il paper introduce un peso compensativo. La qualità di uno shapelet viene moltiplicata per un fattore che bilancia la dimensione delle classi coinvolte. Questo assicura che il trasformatore "veda" le forme caratteristiche di ogni singola classe, indipendentemente da quanti esempi ci siano nel training set.
+		4. Il "Contracting" (Il limite di tempo)Qui Bostrom introduce un concetto fondamentale per chi fa benchmark: il contratto temporale.Dato che la ricerca degli shapelet è lenta ($O(n^2 m^3)$), il paper propone di non cercare necessariamente tutti gli shapelet possibili, ma di impostare un limite di tempo (es. 1 ora).
+			-L'algoritmo campiona casualmente le serie e le lunghezze, tenendo i migliori shapelet trovati finché il tempo non scade.
+			-Conclusione: Bostrom dimostra che, superata una certa soglia di tempo, i miglioramenti di accuratezza diventano marginali.
+		5. Rafforzamento della Rotation Forest
+			Il paper conferma che, tra tutti i classificatori, la Rotation Forest è la più performante sui dati trasformati.
+			Perché: Le distanze degli shapelet sono spesso correlate tra loro. La Rotation Forest usa la PCA (Analisi delle Componenti Principali) internamente, il che le permette di "riassumere" le colonne correlate ed estrarre solo l'informazione pura, superando di gran lunga le Random Forest standard.
+
+
+
+HIVE-COTE 2.0:
+				un meta-ensemble (un insieme di insiemi), composta da 4 esperti, ognuno specializzato in un modo diverso di guardare le serie temporali:
+					1. TDE: L’esperto di "parole" e pattern ripetuti (dizionari). (come weasel e boss
+					2. drCIF: L’esperto di statistiche e intervalli.
+					3. STC: L’esperto di forme specifiche (shapelets)
+					4. Arsenal: L’esperto di trasformazioni casuali (kernel). (ensamble di rocket)
+					Il cuore di HC2 è il sistema CAWPE, che non fa una media semplice dei voti, ma dà più importanza all'esperto che si è dimostrato più affidabile durante l'addestramento su quel particolare problema.
+
+				TDE: Temporal Dictionary Ensemble
+					TDE fa scorrere una finestra sulla serie, trasforma i dati in lettere (discretizzazione SFA) e crea delle "parole". Poi conta quante volte queste parole appaiono. Per decidere quali parametri usare (quanto lunga la finestra, quante lettere usare), TDE non va a caso, ma usa l'intelligenza artificiale (Processi Gaussiani) per prevedere la combinazione migliore
+					1. Il processo di base (Eredità di BOSS):
+						TDE, come BOSS, usa una finestra scorrevole per estrarre sottosequenze, le trasforma con la SFA (Symbolic Fourier Approximation) e le discretizza in "parole" (es. la sequenza diventa "aabcb").
+					2. BOSS e WEASEL sono stati i pionieri, TDE introduce tre innovazioni che lo rendono superiore:
+						- Bigrams (Bigrammi): A differenza di BOSS che conta solo parole singole, TDE conta anche le coppie di parole consecutive (bigrammi) che non si sovrappongono. Questo cattura la relazione temporale tra i pattern (es. "appare la forma A e SUBITO DOPO la forma B").
+							-Discretizzazione Dinamica: Può scegliere tra MCB (binning classico) e IGB (basato sull'Information Gain), rendendolo più flessibile su dataset diversi.
+						- Spatial Pyramids (Piramidi Spaziali): Questa è un'eredità della computer vision. TDE divide la serie in livelli:
+							-Livello 0: l'intera serie.
+							-Livello 1: due metà della serie.
+							-e così via. Calcola istogrammi separati per ogni sezione. In questo modo, TDE sa dove un pattern accade (inizio, metà o fine serie), cosa che BOSS ignorava completamente.
+						- Ricerca Intelligente dei Parametri (Gaussian Processes): BOSS prova parametri casuali. TDE usa l'ottimizzazione Bayesiana: dopo i primi 50 tentativi casuali, usa un Regressore a Processi Gaussiani per prevedere quali combinazioni di parametri ($w, l, \alpha, p$) funzioneranno meglio, risparmiando tempo e trovando modelli più accurati.
+					LE differenzE con WEASEL:
+						-la differenza principale sta nel modo in cui vengono gestiti i bigrammi (le coppie di parole) e la posizione:
+							-WEASEL è "ossessivo": fa scorrere la finestra punto per punto e crea bigrammi anche tra finestre che si sovrappongono quasi totalmente (al 99%). Questo crea una montagna di dati spesso ridondanti che poi deve filtrare con test statistici (Chi-quadro).
+							-TDE è "ordinato": crea bigrammi solo per concatenazione. Aspetta che una finestra finisca prima di considerare la successiva per formare una coppia. Questo cattura meglio la reale successione temporale dei pattern senza "annegare" nel rumore delle sovrapposizioni.
+						-Il concetto di "Dove" (Piramide vs Bag-of-Words):
+							-WEASEL usa un approccio Bag-of-Words: butta tutte le parole in un unico sacco. Se un pattern accade all'inizio o alla fine della serie, per lui è uguale.
+							-TDE usa la Piramide Spaziale: divide la serie in blocchi (intera, poi a metà, poi in quarti). Crea istogrammi separati per ogni blocco e li unisce. In questo modo, TDE sa "dove" si trova il pattern, rispettando la struttura geografica della serie temporale.
+				drCIF: DiverseRepresentationCanonical IntervalForest:
+					Sostituisce i vecchi TSF e RISE, unendo l'analisi statistica nel tempo con quella in frequenza.
+					-pool delle Feature (29 totali):
+						-7 Statistiche Base: Media, Deviazione Standard, Pendenza (slope), Mediana, Range Interquartile (IQR), Minimo e Massimo.
+						-22 Feature catch22: Selezionate per la loro capacità di descrivere proprietà dinamiche complesse (autocorrelazione, distribuzione, ecc.) in modo ultra-rapido.
+					-Le 3 Rappresentazioni (2 trasformazioni della serie originale):
+						1. Serie Temporale Originale (Dominio del tempo).
+						2. Differenze di primo ordine (Dominio del cambiamento/derivata).La Differenza di prim'ordine calcola la derivata della tua serie temporale per capire in che direzione si sta muovendo il segnale.Serve a trasformare la serie da "Posizione" a "Velocità".
+						3. Periodogramma (Dominio della frequenza/spettrale).Usa la Fourier per analizzare l'energia. Il periodogramma ti dice quanta "potenza" c'è in ogni frequenza. Non trasforma i dati in parole come si fa in bos/weasel o TDE che usano SFA per eliminare il rumore e trasformare la serie in una "parola" (simbolizzazione)., ma in una nuova serie di numeri che rappresentano l'intensità dei ritmi.
+								Prende il quadrato del modulo dei coefficienti di Fourier ($|X(f)|^2$). Questo elimina la fase e ti dà un grafico che mostra i picchi di frequenza
+					-Processo di addestramento:
+						-Estrazione Intervalli: L'algoritmo pesca, ad esempio, $k$ intervalli casuali dalla serie originale, $k$ dalle differenze e $k$ dal periodogramma. A differenza di altri modelli, drCIF usa un numero di intervalli proporzionale alla radice quadrata della lunghezza della serie
+						- Per ogni intervallo, non calcola tutte le 29 feature, ma ne seleziona solo un sottoinsieme casuale (indicato nel paper con la lettera $a$).
+						-Concatenazione (Il "Super-Vettore"): Tutte le feature calcolate vengono "incollate" una dopo l'altra.
+						-Input dell'Albero: Questo lungo vettore (che contiene il riassunto statistico di tempo, cambiamento e frequenza) viene passato all'albero decisionale.
+						-Diversità: Ogni albero è diverso perché riceve intervalli diversi (posizione/lunghezza random) e un set di feature diverso (pescato dalle 29 disponibili).
+				Arsenal:Ensemble di classificatori ROCKET.
+					Meccanismo (Trasformazione Convoluzionale): Usa migliaia di filtri casuali che "scorrono" sulla serie (convoluzioni) per estrarre due tipi di informazioni:
+						1. PPV (Proportion of Positive Values): Indica quanto spesso un pattern viene trovato.
+						2. MAX: Indica l'intensità massima di quel pattern.
+					I parametri dei Kernel: Sono la chiave della diversità. Variando lunghezza, dilatazione (distanza tra i punti del kernel) e pesi, Arsenal riesce a vedere sia micro-dettagli che tendenze macroscopiche.
+					il Ridge Regressor (il cervello di ROCKET) non sa dire "quanto è sicuro", non sa dare una probabilità, cambiando classificatore la precisione è diminuita, optato per un ensamble, Arsenal è un ensemble di piccoli modelli ROCKET.
+					questo perche HIVE-COTE usa il sistema CAWPE, che si basa sulla forza della convinzione degli esperti(probailità). con l'ensamble La probabilità non viene più dal singolo modello, ma dal voto della maggioranza della "fucileria".
+					Se 20 piccoli ROCKET su 25 dicono "Classe A", la probabilità per HC2 sarà l'80%.
+					Conclusione del paper: Arsenal non è più accurato del ROCKET standard se preso da solo, ma rende HIVE-COTE 2.0 significativamente migliore grazie alla qualità delle sue probabilità.
+
+DEEP LEARNING: 	RETE NEURALE: una rete neurale è essenzialmente un approssimatore universale di funzioni.
+									- Mentre in una regressione lineare classica cerchi di far passare una retta tra i punti, nel Deep Learning metti insieme tanti piccoli pezzi di funzioni semplici per creare una curva complessissima che si adatta ai tuoi dati (le serie temporali).
+									1. Una rete neurale è composta da migliaia di piccole unità di calcolo chiamate nodi o neuroni. Ogni neurone esegue un'operazione matematica molto semplice basata su tre elementi: Input, Pesi e Bias.
+										- Input ($x$): Sono i dati in entrata (es. i valori di una serie temporale o le caratteristiche di un oggetto).
+										- Pesi ($w$): Ogni input ha un peso associato che ne determina l'importanza. Il neurone moltiplica ogni input per il suo peso. Se il peso è alto, quell'input influenza molto il risultato; se è vicino a zero, l'input viene quasi ignorato.
+										- Bias ($b$): È un valore numerico aggiunto alla somma degli input pesati. Serve a traslare la funzione, permettendo al neurone di "attivarsi" anche quando gli input sono deboli o di restare spento quando sono forti. È il termine noto di un'equazione.
+												L'operazione matematica: Il neurone somma tutto e produce un valore $z$:
+														z = (x_1 * w_1) + (x_2 * w_2) + .... + b
+									2. La Funzione di Attivazione: L'origine della Non-Linearità:
+										- Se ci fermassimo alla somma pesata, la rete sarebbe solo una gigantesca equazione lineare (una retta). Per permettere alla rete di imparare forme complesse e curve, si applica una Funzione di Attivazione al risultato z.
+											- ReLU (Rectified Linear Unit): È la più comune. Se $z$ è negativo, lo trasforma in 0. Se è positivo, lo lascia invariato. Questo crea un "gomito" nel grafico della funzione.  (relu è la piu usata ma ci sono anche sigmoide e curva)
+											- Perché è fondamentale? Combinando milioni di questi "gomiti" (neuroni con ReLU), la rete può approssimare qualsiasi curva o funzione matematica esistente, adattandosi a pattern estremamente irregolari.
+									3. Architettura della Rete (Layer)
+										- I neuroni non lavorano isolati, ma sono organizzati in strati:
+											1. Input Layer: Riceve i dati grezzi.
+											2. Hidden Layers (Strati Nascosti): Dove avviene l'elaborazione vera e propria. Più strati ci sono, più la rete è "Deep" (profonda) e può estrarre concetti astratti.
+											3. Output Layer: Fornisce la previsione finale (es. un valore numerico o una probabilità).
+									4. Il Ciclo di Apprendimento:
+										- L'apprendimento è un processo iterativo:
+											1. Forward Pass: I dati entrano dall'inizio, vengono moltiplicati per i pesi, passano per le funzioni di attivazione e arrivano alla fine producendo una previsione.
+											2. Loss Function (Funzione di Perdita): È un termometro che misura l'errore. Confronta la previsione della rete con il valore reale (la verità). Il risultato è un numero: più è alto, più la rete sta sbagliando.
+									5. La "Magia" della Correzione: Backpropagation e Gradient Descent
+										- Per migliorare, la rete deve "girare le manopole" (modificare pesi e bias) in modo da ridurre l'errore. Questo avviene in due fasi:
+											1. Backpropagation (Il calcolo dell'errore)
+												È il processo in cui l'informazione sull'errore viaggia all'indietro, dall'output verso l'input.
+												- Si parte dalla fine (l'errore) e si usa il calcolo differenziale (derivate) per capire quanto ogni singolo peso e ogni singolo bias ha contribuito a quell'errore.
+												- L'errore viene "distribuito" a ritroso: la rete capisce che "per sbagliare meno alla fine, avrei dovuto cambiare questo peso nel terzo strato e quest'altro nel primo".
+											2. Gradient Descent e Optimizer (L'aggiornamento)
+												Una volta che sappiamo in che direzione muovere i pesi, interviene l'algoritmo di ottimizzazione (come il Gradient Descent o Adam).
+												- Metafora: Immagina di essere su una montagna (errore alto) nella nebbia. Il gradiente ti dice qual è la direzione della pendenza più ripida verso il basso. (verso l'errore minimo)
+												- Learning Rate: È la grandezza del passo che fai. Se è troppo grande rischi di saltare la valle (il minimo dell'errore); se è troppo piccolo ci metterai un'eternità ad arrivare.
+												- Aggiornamento: Dopo aver calcolato tutto il gradiente tramite la backpropagation, l'ottimizzatore aggiorna contemporaneamente tutti i pesi e i bias della rete.
+
+						Quando passiamo da un singolo neurone a una rete intera con più output, stiamo effettivamente passando dal separare i dati con una semplice linea al farlo con iperpiani (piani in più dimensioni) che si flettono e si adattano.
+							1. 	Multipli Input: Lo spazio multidimensionale: Ogni feature della tua serie temporale è una dimensione.
+								- Se hai solo 2 input (es. temperatura e pressione), i tuoi dati vivono in un piano (2D).
+								- Se hai 100 input (100 rilevazioni temporali), i tuoi dati vivono in uno spazio a 100 dimensioni. I pesi dei neuroni del primo strato decidono come "orientarsi" in questo spazio enorme per trovare i pattern giusti.
+							2. Multipli Output e Softmax: Quando vuoi classificare più classi (es. "Sano", "Aritmia", "Infarto"), lo strato finale avrà un nodo per ogni classe.
+								- Ogni nodo di output produce un punteggio (logit).
+								- Per trasformare questi punteggi in qualcosa di comprensibile, si usa solitamente la funzione Softmax.
+									- La Softmax prende tutti i risultati e li trasforma in probabilità (numeri tra 0 e 1 che sommati danno 100%). Esempio: Sano 10%, Aritmia 85%, Infarto 5%.
+							3. Iperpiani e Separazione delle Classi:
+								- ogni neurone crea un iperpiano, quindi vengono creati vari iperpiani che distinguono varie classi. grazie alle funzioni di attivazione gli iperpiani non sono dritti ma si curvano e piegnao attorno ai dati.
+
+						SOFTMAX vs ARGMAX:
+							- argmax trasforma l'output piu alto in 1 e tutto gli altri output a 0, adatto per la classificazione finale
+							- softmax Prende i punteggi grezzi (logits) in uscita dai neuroni e li trasforma in una distribuzione di probabilità (es: 0.7, 0.2, 0.1).
+								argmax non è facilmente utilizzabile dalla backpropagation/gradientDescent perche non continua. invece softmax è continua e derivabile
+						CROSS enTROPY :
+							- In termini semplici, la Cross-Entropy misura la "sorpresa" o il "disappunto" della rete.
+								Immagina di avere la verità (Ground Truth) e la previsione della rete:
+									- La Verità (Target): È una distribuzione perfetta. Se il dato è la Classe A, la verità è $[1, 0, 0]$ (certezza assoluta).
+									- La Previsione (Softmax): È quello che dice la rete, es. $[0.7, 0.2, 0.1]$
+								La Cross-Entropy calcola quanto faticoso è trasformare la previsione della rete nella verità.
+									- Se la rete è molto sicura della risposta corretta (es. predice $0.99$ dove la verità è $1$), la Cross-Entropy è quasi zero. La rete non è "sorpresa".
+									- Se la rete è molto sicura della risposta sbagliata (es. predice $0.01$ dove la verità è $1$), la Cross-Entropy diventa un numero altissimo. La rete riceve una "punizione" severa per la sua eccessiva sicurezza nell'errore.
+								LA BACKPROPAGATION é PIU EFFICIENTE CON CROSSENTROPY + softmax rispetto a Somma dell'Errore Quadrato + softmax
+									- Se usi la somma dell'errore quadrato, la forza della correzione (il gradiente) dipende anche dalla derivata della funzione di attivazione (Softmax).
+										- Quando la rete è "molto convinta" di una risposta sbagliata, la curva della Softmax diventa molto piatta.
+										- Una curva piatta ha una derivata vicina a zero.
+										- Risultato: La Backpropagation riceve un segnale debolissimo ("gradiente svanente"), i pesi non si muovono e la rete rimane "bloccata" nel suo errore per molto tempo. È come cercare di rotolare una pallina su un piano quasi orizzontale.
+								    - Come avevi intuito, la Cross-Entropy "annulla" matematicamente quella piattezza della Softmax.
+										- Anche se la rete è molto convinta dell'errore, la combinazione Cross-Entropy + Softmax genera una pendenza sempre ripida finché c'è errore.
+										- Risultato: Più l'errore è grande, più la spinta a cambiare i pesi è forte. La rete impara in modo aggressivo quando sbaglia tanto e rallenta solo quando è vicina alla verità.
+						BATCH NORMALIZATION: Immagina che dopo una convoluzione i numeri diventino giganti (es. 1000) e dopo un'altra diventino piccolissimi (es. 0.001). Questo manderà in crisi la Backpropagation.
+													-Cosa fa: Prende i risultati di uno strato e li "normalizza" (fa sì che la media sia 0 e la deviazione standard sia 1).
+													-Perché serve: Mantiene i dati in un intervallo numerico stabile. Questo permette di usare un Learning Rate più alto (addestramento più veloce) e impedisce che i pesi "esplodano" o diventino inutilizzabili.
+						ADAM: Adaptive Moment Estimation: Natura: È un algoritmo che aggiorna i pesi dei filtri durante la Backpropagation.
+															-Adaptive: Non usa un passo fisso, ma lo adatta per ogni singolo peso della rete.
+															-Momentum: Usa la "memoria" dei passi precedenti per superare ostacoli (minimi locali) e non rallentare.
+							Quindi Adam è quasi una "simulazione fisica" più che un semplice algoritmo matematico:
+													-la discesa del gradiente classica (SGD) è un uomo che cammina bendato sentendo la pendenza sotto i piedi
+													-Adam è una palla pesante che rotola in una valle, prende inerzia
+														-Adam acquista momento. Se la palla incontra una piccola buca (un "minimo locale" che non è il fondo della valle), la sua velocità le permette di risalire l'altro lato della buca e continuare la discesa. Un algoritmo senza "fisica" rimarrebbe bloccato nella prima buca che trova.
+														-L'Attrito Adattivo (Il Secondo Momento): Qui la simulazione diventa ancora più intelligente. Immagina che il terreno diventi improvvisamente molto scivoloso o molto accidentato:
+																						-Se i cambiamenti di pendenza sono violenti (il gradiente "balla" molto), Adam aumenta virtualmente l'attrito, rallentando per non finire fuori strada.
+																						-Se il terreno è liscio e la discesa è costante, Adam diminuisce l'attrito e lascia che la palla corra veloce verso il fondo.
+						Che cos'è la CAM? La CAM è lo strumento che trasforma la rete neurale da una "scatola nera" a un modello spiegabile. Ci permette di vedere quali parti della serie temporale (es. un picco, una caduta improvvisa, un plateau) hanno spinto la rete a scegliere una determinata classe.
+											1 Come si collega alla ResNet e alla FCN?
+												-C'è un requisito fondamentale: per avere la CAM, la rete deve terminare con uno strato di Global Average Pooling (GAP) seguito immediatamente dalla Softmax.
+												-Sia la FCN che la ResNet del paper di Wang sono costruite così.
+												-Anche se la ResNet è molto più profonda, la CAM guarda sempre e solo l'ultimo strato di filtri (quelli del terzo blocco residuo).
+											3. Il Processo: "Dalla Media al Dettaglio"Come hai giustamente intuito, il trucco sta nel non perdere l'informazione temporale.I 128 Filtri Finali: L'ultimo strato (dopo la Batch Normalization e la ReLU) produce 128 mappe lunghe 100. Questi sono i "disegni" finali che la rete ha fatto.Il "Voto" (GAP): Durante l'uso normale, il GAP fa la media di questi disegni. Otteniamo 128 numeri.Il "Giudizio" (Softmax): La Softmax moltiplica questi 128 numeri per i suoi 128 pesi (le "manopole" dell'esperto).Esempio: Se il peso #10 per la Classe A è molto alto, significa che l'esperto si fida cecamente di ciò che ha trovato il Filtro 10.La generazione della CAM:Invece di usare i numeri medi, prendiamo i 128 pesi dell'esperto e li applichiamo direttamente ai 128 vettori da 100.Peso 1 $\times$ Vettore 1Peso 2 $\times$ Vettore 2...e così via.Alla fine sommiamo tutto: i punti dove i vettori erano "attivi" e i pesi erano "alti" risulteranno in numeri enormi. Quelli sono i punti che la CAM evidenzia come decisivi.4. Perché è rivoluzionaria per le Serie Temporali?Localizzazione Debolmente Supervisionata: La rete impara dove si trova il pattern importante senza che tu glielo abbia mai detto. Tu le dai solo l'etichetta (es. "Questo è un battito malato"), lei scopre da sola qual è il millisecondo che rende il battito malato.Validazione Scientifica: Se un medico vede che la rete ha classificato correttamente un'aritmia, ma la CAM evidenzia un punto dove c'era solo un disturbo del sensore, il medico capisce che la rete ha indovinato "per fortuna" e non è affidabile.
+
+
+
+
+
+
+RESNET (residual networks): il paper di resnet propone oltre a resnet altri 2 algoritmi piu semplci ovvero:
+							MLP (Multilayer perceptron):   l'architettura piu semplice tra le tre, usato come punto di partenza.
+														 1 Che cos'è l'MLP?: È una rete neurale completamente connessa (Fully Connected). Questo significa che ogni singolo neurone di uno strato è collegato a tutti i neuroni dello strato successivo. Non c'è il concetto di "scorrimento" (come nei filtri convoluzionali): la rete guarda l'input tutto insieme, come un blocco unico.
+														 2 La struttura nel paper di Wang:
+																-Nel paper, l'MLP usato come termine di paragone ha questa configurazione:
+																-Input: La serie temporale grezza (es. i 100 punti della serie).
+																-Strati Nascosti: 3 strati densi, ciascuno con 500 neuroni.
+																-Dropout: Viene usato per evitare che la rete impari i dati a memoria (overfitting).
+																-Output: Strato Softmax per la classificazione finale.
+														 3 Caratteristiche Tecniche Fondamentali:
+																-Invarianza Spaziale Assente: Questo è il suo limite più grande. Se sposti un pattern (es. un picco) di un millimetro a destra nella serie temporale, l'MLP lo vede come un dato completamente nuovo, perché quel picco colpirà neuroni diversi. La FCN invece lo "troverebbe" comunque grazie allo scorrimento del filtro.
+																-Enorme numero di parametri: Poiché tutto è connesso a tutto, i pesi da addestrare sono tantissimi. Questo rende l'MLP molto pesante da gestire man mano che la serie temporale diventa più lunga.
+																-Sensibilità al Rumore: L'MLP tende a dare importanza a ogni singolo punto della serie, rendendolo molto vulnerabile se i dati contengono disturbi o fluttuazioni casuali.
+																-Globalità: A differenza delle reti convoluzionali che estraggono "caratteristiche locali" (piccoli pattern), l'MLP cerca di trovare relazioni tra il primo punto della serie e l'ultimo fin dal primo strato.
+														 4 perche è la baseline? per dimostrare che piu grande non significa migliore, infatti MLP è semplice ma molto piu grande rispetto agli atri due algoritmi che anche se piu piccoli sono piu precisi
+							FCN (Fully Convolutional network): architettura piu snella e che performa meglio anche di resnet perche  probabilemnte ha meno overfitting e generalizza meglio rispetto a RESNET sulle serie temporali dei dataset UCR
+																1 Che cos'è la FCN?: A differenza dell'MLP, la FCN non usa strati "Dense" (completamente connessi) per estrarre le caratteristiche. Si basa interamente su convoluzioni. La parola "Fully" (completamente) indica che non ci sono strati nascosti di tipo classico, ma solo blocchi convoluzionali fino alla fine.
+																2 La struttura nel paper di Wang:
+																	-La FCN proposta è composta da tre blocchi principali. Ogni blocco segue questo schema:
+																		-Convoluzione 1D: Estrae i pattern (128 filtri nel primo, 256 nel secondo, 128 nel terzo).
+																		-Batch Normalization: Stabilizza i numeri e velocizza l'addestramento.
+																		-ReLU: La funzione di attivazione che introduce la non-linearità.
+																		-Alla fine di questi tre blocchi, non c'è un MLP, ma il Global Average Pooling (GAP) seguito dalla Softmax.
+																3 Caratteristiche Tecniche Fondamentali:
+																	-Invarianza alla Traslazione: Questa è la sua "superpotenza". Grazie ai filtri che scorrono lungo la serie, la FCN è in grado di riconoscere un pattern (es. un'aritmia in un ECG) indipendentemente dal momento in cui si verifica (all'inizio, a metà o alla fine della serie).
+																	-Riduzione dei Parametri: Poiché i filtri sono piccoli (possono essere lnghi 8, 5, 3) e vengono "riutilizzati" lungo tutta la serie (weight sharing), la FCN ha molti meno pesi da addestrare rispetto all'MLP. Questo riduce drasticamente il rischio di overfitting.
+																	-Gerarchia delle Caratteristiche: Ogni strato costruisce sopra quello precedente. Il primo strato vede pattern semplici, il secondo combina quei pattern in forme più complesse, e il terzo estrae concetti astratti necessari alla classificazione.
+																	-Interpretabilità (CAM): Come abbiamo visto, la struttura della FCN permette di generare la Class Activation Map, rendendo il modello "spiegabile" (puoi vedere dove la rete ha guardato).
+																4 Il ruolo del Global Average Pooling (GAP):
+																	-Questa è la firma della FCN di Wang. Invece di "appiattire" (flatten) i dati e mandarli a un MLP (che distruggerebbe l'informazione spaziale), il GAP fa la media di ogni mappa.
+																	-Vantaggio: Riduce drasticamente il numero di parametri finali e permette alla rete di accettare in input serie di lunghezze diverse (cosa che l'MLP non può fare).
+											-se non ricordo male il primo strato applica 128 filtri (kernels scorrevoli che scorrono di un punto alla volta, "Without Striding" (Senza salto)/ stride=1) di lunghezza 8, poi applica batch normalization e il vettore risultante entra nella relu, dala relu ne esche una features map con stesso numero di vettori e lunghezza dei vettori entranti in relu, semplicemente i valori sono stati messi a 0 se erano negativi e invariati se positivi,
+													la features map passa al secondo strato che fa praticamente la stesa cosa ma con 256 filtri di lunghezza 5 + BN + RELU, terzo strato 128 kernels di lunghezza 3 +BN + RELU -> poi si fa GLOBAL AVErAGE POOLING
+										-GAP: che fa la media dell'intero vettore risultato dalla convoluzione, avendo 128 vettori, facciamo 128 medie e abbiamo come risultato 128 numeri che entrano nella softmax che contiene 128 pesi per regolare/attivare i 128 numeri/medie
+												-Qui sì che abbiamo dei neuroni classici (Fully Connected): se devi classificare 3 classi (es. Sano, Malato, Rischio), avrai 3 neuroni finali.(alll-'interno della softmax), gnuno dei 3 neuroni guarda tutti i 128 numeri, applica i pesi finali e ti dà la probabilità.
+										-Perché si parte da kernels lunghi a quelli corti? Di solito si parte da finestre grandi per vedere pattern ampi e si restringe per vedere dettagli fini.
+
+							RESNET (RESIDUAL NETWORKS): in ResNet la gerarchia cambia leggermente rispetto a FCN. Non parliamo più di singoli strati, ma di Blocchi. E come hai notato, ogni blocco è una piccola "fabbrica" che contiene tre passaggi interni (3 sottostrati).
+										1 Com'è fatto un "Blocco Residuo"?: Immaginiamo il primo blocco (quello con 64 filtri):
+																						1 Input (x): La serie temporale entra nel blocco.
+																						2 Sotto-strato 1: 64 filtri (kernel) -> Batch Norm -> ReLU.
+																						3 Sotto-strato 2: 64 filtri -> Batch Norm -> ReLU.
+																						4 Sotto-strato 3: 64 filtri -> Batch Norm. (Attenzione: Qui la ReLU non si applica subito!).
+																						5 La Somma (Shortcut): Prendi l'input originale x e lo sommi matematicamente al risultato del terzo sotto-strato.
+																						6 ReLU Finale: Solo dopo la somma, applichi l'ultima ReLU al risultato totale.
+																								Il primo sotto-strato "guarda" i dati.
+																								Il secondo li "elabora".
+																								Il terzo li "prepara" per essere sommati all'originale.
+												-in questa rete neurale i pesi da modificare sono i valori dei numeri all'interno dei kernels, quindi non modifichi un peso solo come nelle reti classiche ma un intero kernel
+										2 perche RESIDUO?: In una rete tradizionale, ogni strato deve imparare a trasformare completamente l'input in qualcosa di nuovo. Se l'input è x, lo strato deve calcolare H(x).
+															Nella ResNet, noi non chiediamo alla rete di imparare H(x), ma le diamo già x (tramite il salto) e le chiediamo di imparare solo "cosa manca" per arrivare al risultato ideale.
+																	-Matematicamente: H(x) = F(x) + x
+																	-La rete impara F(x), che è la differenza tra l'obiettivo e l'input. Questa differenza si chiama Residuo.
+																	-L'analogia della bilancia: Se sai già che un oggetto pesa circa 1kg ($x$), la bilancia deve solo misurare i 5 grammi di polvere sopra ($F(x)$). È molto più facile e preciso misurare solo il "residuo" di 5 grammi che cercare di ricalcolare ogni volta il chilogrammo intero.
+										3. Il "Salto in Avanti" (Feed-Forward)Immagina un blocco residuo come un bivio:
+																					1 La strada maestra (Filtri): L'input $x$ attraversa 3 sotto-strati di convoluzioni, batch norm e ReLU. Qui i dati vengono distorti, raffinati e trasformati.
+																					2 La scorciatoia (Shortcut): L'input $x$ prende un "ponte" esterno e vola direttamente alla fine del blocco, saltando le convoluzioni.
+																		-Alla fine del blocco, i due percorsi si ricongiungono con una somma algebrica.Perché è geniale? Perché se le convoluzioni in quel momento non hanno imparato nulla di utile (magari sono solo rumore), la rete può semplicemente azzerare quei pesi e far passare l'input $x$ così com'è. La rete ha la "libertà" di non rovinare i dati se non sa come migliorarli.
+										4 La Backpropagation all'indietro: Il salto del gradiente: Qui entriamo nel cuore del problema del gradiente svanante:
+																					-Senza ResNet: l'errore che torna indietro viene moltiplicato per i pesi di ogni strato. Se hai 100 strati e ogni filtro ha pesi piccoli, l'errore si polverizza prima di arrivare all'inizio. I primi strati non sanno cosa correggere perché il messaggio "Hai sbagliato di 10" è diventato "Hai sbagliato di 0,0000000001".
+																					-Con ResNet (Il Filo Elettrico): Quando l'errore torna indietro e incontra il punto della "somma"(la scorciatoia, il salto che x fece in avanti adesso lo farà l'errore della backpropagation, all'indietro), la matematica (la derivata) gli apre due strade.
+																																				1 Una parte attraversa i filtri e quindi i sottoblocchi(e si indebolisce).
+																																				2 L'altra parte viaggia sulla scorciatoia (salta i sottoblocchi). Poiché sulla scorciatoia non ci sono filtri che moltiplicano o indeboliscono il segnale, l'errore "salta" l'intero blocco e arriva all'inizio intatto.
+										5 in Addestramento: Usa Adam (la nostra "palla pesante" con inerzia) per navigare meglio tra i tantissimi pesi.
+												Prestazioni: Molto potente, ma rischia l'overfitting se i dati sono pochi (perché ha troppa "memoria" e rischia di imparare i dati a memoria). FCN performa meglio infatti
+
+									-La ResNet risolve il limite fisico della profondità. Mentre in una rete normale aggiungere strati a un certo punto peggiora le cose (perché l'errore non torna più indietro), nella ResNet puoi aggiungere blocchi all'infinito perché la scorciatoia garantisce che ogni strato, anche il primo, riceva sempre un segnale chiaro su come correggere i propri filtri.
+
+
+
+
+
+	come creare virtuale environment VENV:
+				python -m venv venv   PER CREARE
+				cd C:\tirocinio\Time_Series_Classification_Experiments TI SPOSTI IN CARTELLA
+				.\venv\Scripts\activate                                ATTIVI
+				python benchmark_all_algorithms_parallel.py            RUNNI
+
+
+	ssh mliberatore@130.192.212.52
+	ssh worker-4
+	cd /mnt/shared_nfs/mliberatore/Time_Series_Classification_Experiments/skTimeTest
+
+
+	password github: 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
+
+	nano nome file per aprire il file su linux in editor testo
+	nvidia-smi
+	watch nvidia smi
+
+	export PATH=/usr/local/cuda/bin${PATH:+:${PATH}}
+export LD_LIBRARY_PATH=/usr/local/cuda/lib64${LD_LIBRARY_PATH:+:${LD_LIBRARY_PATH}}
+Cosa fanno questi comandi?
+
+Il primo permette al terminale di trovare programmi come nvcc o nvidia-smi.
+
+Il secondo (fondamentale per TensorFlow) permette a Python di caricare le librerie dinamiche (.so) che servono per far girare i calcoli sulla Tesla T4.
+
+
+
+per non far morire la sessione:
+3. L'alternativa veloce: nohup
+Se non vuoi imparare screen, c'è un comando che dice al processo di ignorare il segnale di chiusura:
+
+Bash
+nohup python benchmark_all_algorithms_parallel.py > output.log 2>&1 &
+nohup: Non fermarti se chiudo la sessione.
+
+> output.log: Salva tutto quello che scriveresti a video in un file chiamato output.log.
+
+2>&1: Salva anche gli errori nello stesso file.
+
+&: Metti il processo in background (ti restituisce subito il controllo del terminale).
+
+Come leggere il risultato di screen -ls
+Quando digiti screen -ls, vedrai una riga simile a questa: 12345.benchmark_tesi (Detached)
+
+Se vedi (Detached): Usa screen -r benchmark_tesi.
+
+Se vedi (Attached): Significa che il server pensa che tu sia ancora connesso (magari a causa del crash del Wi-Fi). In questo caso devi usare screen -d -r benchmark_tesi.
+
+	ctre+a e poi d per distaccarsi
+
+
+	per accedere al file di log senza rischi di rovinare tutto
+	less è ottimo: Se vuoi leggere tutto il file dall'inizio mentre cresce:
+
+Bash
+less +G benchmark_completo.log
+
+poer vedere solo le ultime 100 righe
+tail -n 100 benchmark_completo.log
+
+Consiglio: Invece di usare less,
+se vuoi vedere i log che scorrono in tempo reale senza dover schiacciare nulla,
+ usa:
+		tail -f benchmark_completo.log
+		(Il flag -f sta per follow: il terminale si aggiornerà da solo ogni volta che compare una nuova riga).
