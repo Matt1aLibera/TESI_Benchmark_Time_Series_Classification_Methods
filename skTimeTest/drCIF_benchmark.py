@@ -1,5 +1,7 @@
 import time
 import json
+from time import time_ns
+
 import numpy as np
 from sktime.classification.interval_based import DrCIF
 from sklearn.metrics import accuracy_score, f1_score
@@ -23,13 +25,15 @@ def run_drcif_benchmark(dataset_name: str, data: Dict[str, Any], seed: int,
     n_estimators = kwargs.get("n_estimators", 100)
     att_subsample_size = kwargs.get("att_subsample_size", 10)
     n_intervals = kwargs.get("n_intervals", None)
+    time_limit = kwargs.get("time_limit_in_minutes", 360)#6 ore
 
     classifier = DrCIF(
         n_estimators=n_estimators,
         n_intervals=n_intervals,  # La formula automatica è la scelta migliore per la tesi
         att_subsample_size=att_subsample_size,
         n_jobs=-1,          # Parallelismo gestito dai seed nel main
-        random_state=seed
+        random_state=seed,
+        time_limit_in_minutes = time_limit,
     )
 
     # Addestramento (Fit)
