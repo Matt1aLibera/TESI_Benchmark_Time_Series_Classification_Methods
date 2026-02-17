@@ -44,27 +44,38 @@ DATASET_NAMES: List[str] = [
 ]
 
 ALGORITHMS_TO_RUN = [
-    #{
-    #   "name": HC2_NAME,
-    #   "variant": "HC2_Standard",
-    #   "params": {
-    #       "stc_params": {"n_shapelet_samples": 10000, "max_shapelets": None},
-    #       "drcif_params": {"n_estimators": 200, "att_subsample_size": 10},
-    #       "arsenal_params": {"num_kernels": 2000, "n_estimators": 25},
-#       "tde_params": {"n_parameter_samples": 250, "max_ensemble_size": 50}
-#       }
-    #   },
-{
-        "name": STC_NAME,
-        "variant": "STC_Standard",
-        "params": {
-            "n_shapelet_samples": 10000, "n_estimators": 200,
-            "max_shapelets": None, "time_limit_in_minutes" : 3.0}
+    {
+        "name": ROCKET_NAME,
+        "variant": "ROCKET_Standard",
+        "params": {"num_kernels": 10000}
     },
-{
-        "name": DRCIF_NAME,
-        "variant": "DrCIF_Standard",
-        "params": {"n_estimators": 200, "att_subsample_size": 10, "time_limit_in_minutes" : 3.0,}
+    {
+        "name": ARSENAL_NAME,
+        "variant": "Arsenal_Standard",
+        "params": {"n_estimators": 25, "num_kernels": 2000}
+    },
+    {
+        "name": BOSS_NAME,
+        "variant": "BOSS_Standard",
+        "params": {
+            "max_ensemble_size": 500,
+            "feature_selection": "none",
+            "threshold": 0.92}
+    },
+    {
+        "name": INCEPTION_NAME,
+        "variant": "Inception_Standard",
+        "params": {"n_epochs": 1500, "batch_size": 64}
+    },
+    {
+        "name": RESNET_NAME,
+        "variant": "ResNet_Standard",
+        "params": {"n_epochs": 1500, "batch_size": 16}
+    },
+    {
+        "name": WEASEL_NAME,
+        "variant": "WEASEL_Standard",
+        "params": {"window_inc": 2, "p_threshold": 0.05}
     },
 ]
 
@@ -161,7 +172,7 @@ if __name__ == "__main__":
 
     all_benchmark_results = []
     # Definiamo il nome del file CSV per il salvataggio incrementale
-    csv_filename = "benchmark_results_detailed.csv"
+    csv_filename = "benchmark_results_FAST.csv"
     # --- PULIZIA AUTOMATICA ---
     if os.path.exists(csv_filename):
         print(f"Rilevato vecchio file {csv_filename}. Rimozione in corso per nuova run...")
