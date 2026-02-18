@@ -29,32 +29,53 @@ SEEDS: List[int] = [0, 1, 2]
 
 # Lista dei dataset (puoi decommentare quelli che vuoi far girare stanotte)
 DATASET_NAMES: List[str] = [
-    #"Crop",
+    "Crop",
     "Chinatown",
-    #"DiatomSizeReduction",
-    #"ElectricDevices",
-    #"FordB",
-    #"Fungi",
-    #"HandOutlines",
-    #"HouseTwenty",
-    #"InsectEPGSmallTrain",
-    #"ItalyPowerDemand",
-    #"Rock",
-    #"SmoothSubspace",#
+    "DiatomSizeReduction",
+    "ElectricDevices",
+    "FordB",
+    "Fungi",
+    "HandOutlines",
+    "HouseTwenty",
+    "InsectEPGSmallTrain",
+    "ItalyPowerDemand",
+    "Rock",
+    "SmoothSubspace",#
 ]
 
 ALGORITHMS_TO_RUN = [
     {
-        "name": DRCIF_NAME,
-        "variant": "DrCIF_Standard",
-        "params": {"n_estimators": 200, "att_subsample_size": 10, "time_limit_in_minutes" : 3,}
+        "name": INCEPTION_NAME,
+        "variant": "Inception_Standard",
+        "params": {"n_epochs": 1500, "batch_size": 64}
     },
     {
-        "name": STC_NAME,
-        "variant": "STC_Standard",
+        "name": ROCKET_NAME,
+        "variant": "ROCKET_Standard",
+        "params": {"num_kernels": 10000}
+    },
+    {
+        "name": ARSENAL_NAME,
+        "variant": "Arsenal_Standard",
+        "params": {"n_estimators": 25, "num_kernels": 2000}
+    },
+    {
+        "name": BOSS_NAME,
+        "variant": "BOSS_Standard",
         "params": {
-            "n_shapelet_samples": 10000, "n_estimators": 200,
-            "max_shapelets": None, "time_limit_in_minutes" : 3,}
+            "max_ensemble_size": 500,
+            "feature_selection": "none",  # Come da documentazione standard
+            "threshold": 0.92}
+    },
+    {
+        "name": RESNET_NAME,
+        "variant": "ResNet_Standard",
+        "params": {"n_epochs": 1500, "batch_size": 16}
+    },
+    {
+        "name": WEASEL_NAME,
+        "variant": "WEASEL_Standard",
+        "params": {"window_inc": 2, "p_threshold": 0.05}
     },
 ]
 
