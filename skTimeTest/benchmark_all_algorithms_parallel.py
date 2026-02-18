@@ -29,13 +29,13 @@ SEEDS: List[int] = [0, 1, 2]
 
 # Lista dei dataset (puoi decommentare quelli che vuoi far girare stanotte)
 DATASET_NAMES: List[str] = [
-    "Crop",
+    #"Crop",
     #"Chinatown",
     #"DiatomSizeReduction",
     #"ElectricDevices",
     #"FordB",
     #"Fungi",
-    #"HandOutlines",
+    "HandOutlines",
     #"HouseTwenty",
     #"InsectEPGSmallTrain",
     #"ItalyPowerDemand",
@@ -44,24 +44,6 @@ DATASET_NAMES: List[str] = [
 ]
 
 ALGORITHMS_TO_RUN = [
-    {
-        "name": ROCKET_NAME,
-        "variant": "ROCKET_Standard",
-        "params": {"num_kernels": 10000}
-    },
-    {
-        "name": ARSENAL_NAME,
-        "variant": "Arsenal_Standard",
-        "params": {"n_estimators": 25, "num_kernels": 2000}
-    },
-    {
-        "name": BOSS_NAME,
-        "variant": "BOSS_Standard",
-        "params": {
-            "max_ensemble_size": 500,
-            "feature_selection": "none",
-            "threshold": 0.92}
-    },
     {
         "name": INCEPTION_NAME,
         "variant": "Inception_Standard",
