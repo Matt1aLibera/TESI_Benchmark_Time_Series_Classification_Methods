@@ -45,17 +45,23 @@ DATASET_NAMES: List[str] = [
 
 ALGORITHMS_TO_RUN = [
     {
-        "name": DRCIF_NAME,
-        "variant": "DrCIF_Standard",
-        "params": {"n_estimators": 200, "att_subsample_size": 10, "time_limit_in_minutes": 3, }
-    },
-    {
-        "name": STC_NAME,
-        "variant": "STC_Standard",
+        "name": HC2_NAME,
+        "variant": "HC2_Standard_Test",
         "params": {
-            "n_shapelet_samples": 10000, "n_estimators": 200,
-            "max_shapelets": None, "time_limit_in_minutes": 3, }
-    },
+            "stc_params": {
+                "n_shapelet_samples": 10000,
+                "max_shapelets": None,
+                "time_limit_in_minutes": 3  # Limite manuale per STC
+            },
+            "drcif_params": {
+                "n_estimators": 200,
+                "att_subsample_size": 10,
+                "time_limit_in_minutes": 3  # Limite manuale per DrCIF
+            },
+            "arsenal_params": {"num_kernels": 2000, "n_estimators": 25},
+            "tde_params": {"n_parameter_samples": 250, "max_ensemble_size": 50},
+        }
+    }
 ]
 
 all_benchmark_results: List[Dict[str, Any]] = []
