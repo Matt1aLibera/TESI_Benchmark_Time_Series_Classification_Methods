@@ -29,18 +29,18 @@ SEEDS: List[int] = [0, 1, 2]
 
 # Lista dei dataset (puoi decommentare quelli che vuoi far girare stanotte)
 DATASET_NAMES: List[str] = [
-    #"Crop",
-    #"Chinatown",
-    #"DiatomSizeReduction",
-    #"ElectricDevices",
-    #"FordB",
-    #"Fungi",
+    "Crop",
+    "Chinatown",
+    "DiatomSizeReduction",
+    "ElectricDevices",
+    "FordB",
+    "Fungi",
     "HandOutlines",
-    #"HouseTwenty",
-    #"InsectEPGSmallTrain",
-    #"ItalyPowerDemand",
-    #"Rock",
-    #"SmoothSubspace",#
+    "HouseTwenty",
+    "InsectEPGSmallTrain",
+    "ItalyPowerDemand",
+    "Rock",
+    "SmoothSubspace",#
 ]
 
 ALGORITHMS_TO_RUN = [
@@ -53,6 +53,24 @@ ALGORITHMS_TO_RUN = [
         "name": RESNET_NAME,
         "variant": "ResNet_Standard",
         "params": {"n_epochs": 1500, "batch_size": 16}
+    },
+{
+        "name": ROCKET_NAME,
+        "variant": "ROCKET_Standard",
+        "params": {"num_kernels": 10000}
+    },
+    {
+        "name": ARSENAL_NAME,
+        "variant": "Arsenal_Standard",
+        "params": {"n_estimators": 25, "num_kernels": 2000}
+    },
+    {
+        "name": BOSS_NAME,
+        "variant": "BOSS_Standard",
+        "params": {
+            "max_ensemble_size": 500,
+            "feature_selection": "none", # Come da documentazione standard
+            "threshold": 0.92}
     },
     {
         "name": WEASEL_NAME,
