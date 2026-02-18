@@ -29,18 +29,18 @@ SEEDS: List[int] = [0, 1, 2]
 
 # Lista dei dataset (puoi decommentare quelli che vuoi far girare stanotte)
 DATASET_NAMES: List[str] = [
-    #"Crop",
+    "Crop",
     "Chinatown",
-    #"DiatomSizeReduction",
-    #"ElectricDevices",
-    #"FordB",
-    #"Fungi",
-    #"HandOutlines",
-    #"HouseTwenty",
-    #"InsectEPGSmallTrain",
-    #"ItalyPowerDemand",
-    #"Rock",
-    #"SmoothSubspace",#
+    "DiatomSizeReduction",
+    "ElectricDevices",
+    "FordB",
+    "Fungi",
+    "HandOutlines",
+    "HouseTwenty",
+    "InsectEPGSmallTrain",
+    "ItalyPowerDemand",
+    "Rock",
+    "SmoothSubspace",#
 ]
 
 ALGORITHMS_TO_RUN = [
@@ -51,17 +51,34 @@ ALGORITHMS_TO_RUN = [
             "stc_params": {
                 "n_shapelet_samples": 10000,
                 "max_shapelets": None,
-                "time_limit_in_minutes": 3  # Limite manuale per STC
+                "time_limit_in_minutes": 120  # Limite manuale per STC
             },
             "drcif_params": {
                 "n_estimators": 200,
                 "att_subsample_size": 10,
-                "time_limit_in_minutes": 3  # Limite manuale per DrCIF
+                "time_limit_in_minutes": 180  # Limite manuale per DrCIF
             },
             "arsenal_params": {"num_kernels": 2000, "n_estimators": 25},
             "tde_params": {"n_parameter_samples": 250, "max_ensemble_size": 50},
         }
-    }
+    },
+    {
+        "name": DRCIF_NAME,
+        "variant": "DrCIF_Standard",
+        "params": {"n_estimators": 200, "att_subsample_size": 10, "time_limit_in_minutes": 180}
+    },
+    {
+        "name": STC_NAME,
+        "variant": "STC_Standard",
+        "params": {
+            "n_shapelet_samples": 10000, "n_estimators": 200,
+            "max_shapelets": None, "time_limit_in_minutes": 120}
+    },
+    {
+        "name": RIC_RF_NAME,
+        "variant": "RIC_Standard",
+        "params": {"n_intervals": 100, "n_estimators": 200}
+    },
 ]
 
 all_benchmark_results: List[Dict[str, Any]] = []

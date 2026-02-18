@@ -19,7 +19,7 @@ def run_stc_benchmark(dataset_name: str, data: Dict[str, Any], seed: int,
     n_est = kwargs.get("n_estimators", 200) 
     n_samples = kwargs.get("n_shapelet_samples", 10000)
     max_sh = kwargs.get("max_shapelets", 1000)
-    time_limit = kwargs.get("time_limit_in_minutes", 360) #6ore
+    time_limit = kwargs.get("time_limit_in_minutes", 120)
 
     # Definiamo l'estimator interno (Rotation Forest)
     # Se vuoi usare il default assoluto di sktime (molto pesante), metti n_estimators=200

@@ -25,7 +25,7 @@ def run_drcif_benchmark(dataset_name: str, data: Dict[str, Any], seed: int,
     n_estimators = kwargs.get("n_estimators", 100)
     att_subsample_size = kwargs.get("att_subsample_size", 10)
     n_intervals = kwargs.get("n_intervals", None)
-    time_limit = kwargs.get("time_limit_in_minutes", 360)#6 ore
+    time_limit = kwargs.get("time_limit_in_minutes", 180)
 
     classifier = DrCIF(
         n_estimators=n_estimators,
