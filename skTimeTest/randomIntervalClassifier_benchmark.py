@@ -27,7 +27,7 @@ def run_ric_benchmark(dataset_name: str, data: Dict[str, Any], seed: int,
     base_estimator = RotationForest(
         n_estimators=rf_estimators,
         random_state=seed,
-        n_jobs=1,
+        n_jobs=-1,
     )
 
     # Inizializzazione Random Interval Classifier

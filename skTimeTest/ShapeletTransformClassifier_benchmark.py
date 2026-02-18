@@ -26,7 +26,7 @@ def run_stc_benchmark(dataset_name: str, data: Dict[str, Any], seed: int,
     rotf = RotationForest(
         n_estimators=n_est,
         random_state=seed,
-        n_jobs=1
+        n_jobs=-1
     )
 
     classifier = ShapeletTransformClassifier(
