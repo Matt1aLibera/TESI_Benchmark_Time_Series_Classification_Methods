@@ -29,18 +29,18 @@ SEEDS: List[int] = [0, 1, 2]
 
 # Lista dei dataset (puoi decommentare quelli che vuoi far girare stanotte)
 DATASET_NAMES: List[str] = [
-    "Crop",
-    "Chinatown",
-    "DiatomSizeReduction",
-    "ElectricDevices",
-    "FordB",
-    "Fungi",
-    "HandOutlines",
-    "HouseTwenty",
     "InsectEPGSmallTrain",
     "ItalyPowerDemand",
-    "Rock",
     "SmoothSubspace",#
+    "Fungi",
+    "DiatomSizeReduction",
+    "Chinatown",
+    "HouseTwenty",
+    "Rock",
+    "HandOutlines",
+    "Crop",
+    "ElectricDevices",
+    "FordB",
 ]
 
 ALGORITHMS_TO_RUN = [
@@ -174,7 +174,7 @@ if __name__ == "__main__":
 
     all_benchmark_results = []
     # Definiamo il nome del file CSV per il salvataggio incrementale
-    csv_filename = "benchmark_results_SLOW.csv"
+    csv_filename = "benchmark_results_SLOW2.csv"
     # --- PULIZIA AUTOMATICA ---
     if os.path.exists(csv_filename):
         print(f"Rilevato vecchio file {csv_filename}. Rimozione in corso per nuova run...")
@@ -187,12 +187,26 @@ if __name__ == "__main__":
     for algo_cfg in ALGORITHMS_TO_RUN:
         algo_name = algo_cfg["name"]
         variant_name = algo_cfg["variant"]
+
+        # --- LOGICA SPECIFICA PER HIVE-COTE 2.0 ---
+        is_hc2 = (algo_name == HC2_NAME)
+
         algo_start = datetime.now()
         print(f"\n{'='*70}\n ESECUZIONE: {variant_name}\n{'='*70}", flush=True)
         print(f" ORA INIZIO: {algo_start.strftime('%H:%M:%S')}", flush=True)
 
         for dataset_name, data in all_data.items():
+
+            # 1. Se HC2 e il dataset è Crop, salta completamente
+            if is_hc2 and dataset_name.upper() == "CROP":
+                print(f"\n[SKIP] Saltando Crop per {variant_name} (evitiamo freeze RAM/NFS)", flush=True)
+                continue
+
             ds_start = datetime.now()
+
+            # 2. Se HC2, eseguiamo solo il PRIMO seed della tua lista SEEDS
+            current_seeds = [SEEDS[0]] if is_hc2 else SEEDS
+
             print(f"Dataset: {dataset_name} | Esecuzione sequenziale dei {len(SEEDS)} Seed...", flush=True)
 
             dataset_runs = []
