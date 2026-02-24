@@ -212,7 +212,7 @@ if __name__ == "__main__":
             dataset_runs = []
 
             # Sostituiamo Joblib con un ciclo for standard
-            for seed in SEEDS:
+            for seed in current_seeds:
                 seed_start = datetime.now()
                 # Gestione n_jobs per l'algoritmo
                 # Se Deep Learning (ResNet/Inception), TF gestisce i thread da solo.
