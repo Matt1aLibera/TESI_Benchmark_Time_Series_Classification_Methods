@@ -144,7 +144,7 @@ if __name__ == "__main__":
 
     all_benchmark_results = []
     # Definiamo il nome del file CSV per il salvataggio incrementale
-    csv_filename = "benchmark_results_SLOW2.csv"
+    csv_filename = "benchmark_results_FASTresnet.csv"
     # --- PULIZIA AUTOMATICA ---
     if os.path.exists(csv_filename):
         print(f"Rilevato vecchio file {csv_filename}. Rimozione in corso per nuova run...")
