@@ -29,55 +29,25 @@ SEEDS: List[int] = [0, 1, 2]
 
 # Lista dei dataset (puoi decommentare quelli che vuoi far girare stanotte)
 DATASET_NAMES: List[str] = [
-    "InsectEPGSmallTrain",
-    "ItalyPowerDemand",
-    "SmoothSubspace",#
-    "Fungi",
-    "DiatomSizeReduction",
-    "Chinatown",
-    "HouseTwenty",
-    "Rock",
-    "HandOutlines",
-    "Crop",
+    #"InsectEPGSmallTrain",
+    #"ItalyPowerDemand",
+    #"SmoothSubspace",#
+    #"Fungi",
+    #"DiatomSizeReduction",
+    #"Chinatown",
+    #"HouseTwenty",
+    #"Rock",
+    #"HandOutlines",
+    #"Crop",
     "ElectricDevices",
-    "FordB",
+    #"FordB",
 ]
 
 ALGORITHMS_TO_RUN = [
     {
-        "name": HC2_NAME,
-        "variant": "HC2_Standard_Test",
-        "params": {
-            "stc_params": {
-                "n_shapelet_samples": 10000,
-                "max_shapelets": None,
-                "time_limit_in_minutes": 120  # Limite manuale per STC
-            },
-            "drcif_params": {
-                "n_estimators": 200,
-                "att_subsample_size": 10,
-                "time_limit_in_minutes": 180  # Limite manuale per DrCIF
-            },
-            "arsenal_params": {"num_kernels": 2000, "n_estimators": 25},
-            "tde_params": {"n_parameter_samples": 250, "max_ensemble_size": 50, "time_limit_in_minutes": 180},# Limite manuale per TDE
-        }
-    },
-    {
-        "name": DRCIF_NAME,
-        "variant": "DrCIF_Standard",
-        "params": {"n_estimators": 200, "att_subsample_size": 10, "time_limit_in_minutes": 180}
-    },
-    {
-        "name": STC_NAME,
-        "variant": "STC_Standard",
-        "params": {
-            "n_shapelet_samples": 10000, "n_estimators": 200,
-            "max_shapelets": None, "time_limit_in_minutes": 120}
-    },
-    {
-        "name": RIC_RF_NAME,
-        "variant": "RIC_Standard",
-        "params": {"n_intervals": 100, "n_estimators": 200}
+        "name": RESNET_NAME,
+        "variant": "ResNet_Standard",
+        "params": {"n_epochs": 1500, "batch_size": 4}
     },
 ]
 
