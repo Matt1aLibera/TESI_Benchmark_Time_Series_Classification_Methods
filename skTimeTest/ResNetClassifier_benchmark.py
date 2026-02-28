@@ -1,7 +1,7 @@
 import time
 import json
 import numpy as np
-from keras.src.optimizers import Adam
+from tensorflow.keras.optimizers import Adam
 from sktime.classification.deep_learning.resnet import ResNetClassifier
 from sklearn.metrics import accuracy_score, f1_score
 from typing import Dict, Any
