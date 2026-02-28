@@ -40,27 +40,14 @@ DATASET_NAMES: List[str] = [
     #"HandOutlines",
     #"Crop",
     "ElectricDevices",
-    "FordB",
+    #"FordB",
 ]
 
 ALGORITHMS_TO_RUN = [
     {
-        "name": HC2_NAME,
-        "variant": "HC2_Standard_Test",
-        "params": {
-            "stc_params": {
-                "n_shapelet_samples": 10000,
-                "max_shapelets": None,
-                "time_limit_in_minutes": 120  # Limite manuale per STC
-            },
-            "drcif_params": {
-                "n_estimators": 200,
-                "att_subsample_size": 10,
-                "time_limit_in_minutes": 180  # Limite manuale per DrCIF
-            },
-            "arsenal_params": {"num_kernels": 2000, "n_estimators": 25},
-            "tde_params": {"n_parameter_samples": 250, "max_ensemble_size": 50, "time_limit_in_minutes": 180},
-        }
+        "name": RESNET_NAME,
+        "variant": "ResNet_Standard",
+        "params": {"n_epochs": 1500, "batch_size": 16, "learning_rate": 0.001}
     },
 ]
 
@@ -157,7 +144,7 @@ if __name__ == "__main__":
 
     all_benchmark_results = []
     # Definiamo il nome del file CSV per il salvataggio incrementale
-    csv_filename = "benchmark_results_SLOW3.csv"
+    csv_filename = "benchmark_results_FASTresnet.csv"
     # --- PULIZIA AUTOMATICA ---
     if os.path.exists(csv_filename):
         print(f"Rilevato vecchio file {csv_filename}. Rimozione in corso per nuova run...")

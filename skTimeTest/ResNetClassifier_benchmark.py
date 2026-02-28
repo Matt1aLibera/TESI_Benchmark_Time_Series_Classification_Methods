@@ -1,6 +1,7 @@
 import time
 import json
 import numpy as np
+from keras.src.optimizers import Adam
 from sktime.classification.deep_learning.resnet import ResNetClassifier
 from sklearn.metrics import accuracy_score, f1_score
 from typing import Dict, Any
@@ -17,6 +18,9 @@ def run_resnet_benchmark(dataset_name: str, data: Dict[str, Any], seed: int,
     # Estrazione parametri (Default: Paper Wang et al. 2017)
     epochs = kwargs.get("n_epochs", 1500)
     batch = kwargs.get("batch_size", 16)
+    learning_rate = kwargs.get("learning_rate", 0.01)
+    # Configurazione conservativa per dataset "difficili" come ElectricDevices
+    new_optimizer = Adam(learning_rate=learning_rate)
 
     classifier = ResNetClassifier(
         n_epochs=epochs,
@@ -25,7 +29,8 @@ def run_resnet_benchmark(dataset_name: str, data: Dict[str, Any], seed: int,
         verbose=False,
         activation='sigmoid',
         activation_hidden='relu',
-        use_bias=True
+        use_bias=True,
+        optimizer = new_optimizer
     )
 
     # Addestramento (Fit)
