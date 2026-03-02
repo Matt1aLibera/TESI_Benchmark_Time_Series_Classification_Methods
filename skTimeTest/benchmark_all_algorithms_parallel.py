@@ -56,10 +56,10 @@ ALGORITHMS_TO_RUN = [
             "drcif_params": {
                 "n_estimators": 200,
                 "att_subsample_size": 10,
-                "time_limit_in_minutes": 180  # Limite manuale per DrCIF
+                "time_limit_in_minutes": 360  # Limite manuale per DrCIF
             },
             "arsenal_params": {"num_kernels": 2000, "n_estimators": 25},
-            "tde_params": {"n_parameter_samples": 250, "max_ensemble_size": 50, "time_limit_in_minutes": 180},
+            "tde_params": {"n_parameter_samples": 250, "max_ensemble_size": 50, "time_limit_in_minutes": 360},
             # Limite manuale per TDE
         }
     },
