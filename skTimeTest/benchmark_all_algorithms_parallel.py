@@ -32,7 +32,7 @@ DATASET_NAMES: List[str] = [
     #"InsectEPGSmallTrain",
     #"ItalyPowerDemand",
     #"SmoothSubspace",#
-    #"Fungi",
+    "Fungi",
     #"DiatomSizeReduction",
     #"Chinatown",
     #"HouseTwenty",
@@ -40,7 +40,7 @@ DATASET_NAMES: List[str] = [
     #"HandOutlines",
     #"Crop",
     #"FordB",
-    "ElectricDevices",
+    #"ElectricDevices",
 ]
 
 ALGORITHMS_TO_RUN = [
@@ -158,7 +158,7 @@ if __name__ == "__main__":
 
     all_benchmark_results = []
     # Definiamo il nome del file CSV per il salvataggio incrementale
-    csv_filename = "benchmark_results_SLOW4.csv"
+    csv_filename = "benchmark_results_SLOWfungi.csv"
     # --- PULIZIA AUTOMATICA ---
     if os.path.exists(csv_filename):
         print(f"Rilevato vecchio file {csv_filename}. Rimozione in corso per nuova run...")
