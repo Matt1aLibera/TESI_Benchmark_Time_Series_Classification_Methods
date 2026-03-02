@@ -1,0 +1,4 @@
+dataset,algorithm,variant,seed,hyperparameters,accuracy,f1_score,fit_time,predict_time,total_time_seconds,train_size,series_length,num_classes
+ElectricDevices,ResNet,ResNet_Standard,0,"{""n_epochs"": 1500, ""batch_size"": 16, ""learning_rate"": 0.001, ""n_jobs"": 1}",0.7324601219037739,0.6349475377884002,27867.374307632446,12.637711524963379,27880.01201915741,8926,96,7
+ElectricDevices,ResNet,ResNet_Standard,1,"{""n_epochs"": 1500, ""batch_size"": 16, ""learning_rate"": 0.001, ""n_jobs"": 1}",0.7347944494877447,0.6492237603089255,27618.953625440598,11.691502809524536,27630.645128250122,8926,96,7
+ElectricDevices,ResNet,ResNet_Standard,2,"{""n_epochs"": 1500, ""batch_size"": 16, ""learning_rate"": 0.001, ""n_jobs"": 1}",0.7473738814680326,0.6700748442803839,27583.55272078514,11.68967318534851,27595.24239397049,8926,96,7
