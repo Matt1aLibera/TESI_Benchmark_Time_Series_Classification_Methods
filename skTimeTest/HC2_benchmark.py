@@ -13,8 +13,6 @@ def run_hc2_benchmark(dataset_name: str, data: Dict[str, Any], seed: int,
     X_train, y_train = data['X_train'], data['y_train']
     X_test, y_test = data['X_test'], data['y_test']
 
-    # Estrazione parametri dal dizionario varianti (o default)
-    # time_limit_in_minutes = 0 significa NESSUN limite di tempo.
     stc_p = kwargs.get("stc_params", None)
     drcif_p = kwargs.get("drcif_params", None)
     arsenal_p = kwargs.get("arsenal_params", None)
@@ -32,23 +30,19 @@ def run_hc2_benchmark(dataset_name: str, data: Dict[str, Any], seed: int,
         verbose=0
     )
 
-    # 3. Addestramento (Fit) con misurazione tempo
     start_fit = time.time()
     classifier.fit(X_train, y_train)
     fit_time = time.time() - start_fit
 
-    # 4. Previsione (Predict) con misurazione tempo
     start_pred = time.time()
     y_pred = classifier.predict(X_test)
     predict_time = time.time() - start_pred
 
-    # 5. Output dei risultati
     return {
         "dataset": dataset_name,
         "algorithm": "HIVECOTEV2",
         "variant": variant,
         "seed": seed,
-        # Salviamo la stringa dei parametri effettivamente passati per il debugging
         "hyperparameters": json.dumps(kwargs),
         "accuracy": accuracy_score(y_test, y_pred),
         "f1_score": f1_score(y_test, y_pred, average='macro', zero_division=0),

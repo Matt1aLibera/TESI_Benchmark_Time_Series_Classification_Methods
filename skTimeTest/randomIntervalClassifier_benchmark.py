@@ -15,11 +15,9 @@ def run_ric_benchmark(dataset_name: str, data: Dict[str, Any], seed: int,
     X_train, y_train = data['X_train'], data['y_train']
     X_test, y_test = data['X_test'], data['y_test']
 
-    # --- FIX PER IL FORMATO DATI (Numba friendly) ---
     X_train = convert_to(X_train, to_type="numpy3D").astype('float64')
     X_test = convert_to(X_test, to_type="numpy3D").astype('float64')
 
-    # Estrazione parametri dalle varianti
     n_intervals = kwargs.get("n_intervals", 100)
     rf_estimators = kwargs.get("n_estimators", 200)
 
@@ -38,12 +36,10 @@ def run_ric_benchmark(dataset_name: str, data: Dict[str, Any], seed: int,
         n_jobs=-1,
     )
 
-    # Addestramento (Fit)
     start_fit = time.time()
     classifier.fit(X_train, y_train)
     fit_time = time.time() - start_fit
 
-    # Previsione (Predict)
     start_pred = time.time()
     y_pred = classifier.predict(X_test)
     predict_time = time.time() - start_pred

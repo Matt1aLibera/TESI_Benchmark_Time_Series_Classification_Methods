@@ -14,7 +14,6 @@ def run_inception_benchmark(dataset_name: str, data: Dict[str, Any], seed: int,
     X_train, y_train = data['X_train'], data['y_train']
     X_test, y_test = data['X_test'], data['y_test']
 
-    # Estrazione parametri con i default del paper Fawaz et al. (2020)
     epochs = kwargs.get("n_epochs", 1500)
     batch = kwargs.get("batch_size", 64)
     depth = kwargs.get("depth", 6)
@@ -32,16 +31,14 @@ def run_inception_benchmark(dataset_name: str, data: Dict[str, Any], seed: int,
         verbose=False
     )
 
-    # Addestramento (Fit)
     start_fit = time.time()
     classifier.fit(X_train, y_train)
     fit_time = time.time() - start_fit
 
-    # Previsione (Predict)
     start_pred = time.time()
     y_pred = classifier.predict(X_test)
     predict_time = time.time() - start_pred
-    # PULIZIA FINALE: Libera la memoria del grafo di TensorFlow
+    # Libera la memoria del grafo di TensorFlow
     tf.keras.backend.clear_session()
 
     return {

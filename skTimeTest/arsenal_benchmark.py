@@ -23,12 +23,12 @@ def run_arsenal_benchmark(dataset_name: str, data: Dict[str, Any], seed: int,
         n_jobs=-1
     )
 
-    # Addestramento (Fit)
+    #Fit
     start_fit = time.time()
     classifier.fit(X_train, y_train)
     fit_time = time.time() - start_fit
 
-    # Previsione (Predict)
+    # Predict
     start_pred = time.time()
     y_pred = classifier.predict(X_test)
     predict_time = time.time() - start_pred

@@ -14,11 +14,10 @@ def run_weasel_benchmark(dataset_name: str, data: Dict[str, Any], seed: int,
     X_test, y_test = data['X_test'], data['y_test']
     series_len = data.get('series_length', X_train.shape[-1])
 
-    # 1. Estrazione parametri dalle varianti
     w_inc = kwargs.get("window_inc", 2)
     p_th = kwargs.get("p_threshold", 0.05)
     
-    # 2. Logica Adattiva per WEASEL (Paracadute)
+    # Logica Adattiva per WEASEL
     # WEASEL fallisce se prova a estrarre feature da finestre inconsistenti.
     # Se la serie è molto corta, forziamo window_inc a 1 per non perdere informazioni.
     effective_window_inc = w_inc
@@ -38,17 +37,14 @@ def run_weasel_benchmark(dataset_name: str, data: Dict[str, Any], seed: int,
         n_jobs=8
     )
 
-    # Addestramento (Fit)
     start_fit = time.time()
     classifier.fit(X_train, y_train)
     fit_time = time.time() - start_fit
 
-    # Previsione (Predict)
     start_pred = time.time()
     y_pred = classifier.predict(X_test)
     predict_time = time.time() - start_pred
 
-    # Salvataggio parametri reali usati
     actual_params = kwargs.copy()
     actual_params["effective_window_inc"] = effective_window_inc
 

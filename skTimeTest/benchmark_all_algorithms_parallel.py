@@ -2,16 +2,13 @@ import sys
 import os
 import gc
 import traceback
-# Reindirizza stderr a null per silenziare i warning a livello C/C++
-#sys.stderr = open(os.devnull, 'w')
+
 
 import pandas as pd
 from typing import List, Dict, Any
-from joblib import Parallel, delayed
 from datetime import datetime
 from sktime.datasets import load_from_ucr_tsv_to_dataframe
 
-# Import dei tuoi moduli benchmark
 from weasel_benchmark import run_weasel_benchmark, ALGO_NAME as WEASEL_NAME
 from rocket_benchmark import run_rocket_benchmark, ALGO_NAME as ROCKET_NAME
 from randomIntervalClassifier_benchmark import run_ric_benchmark, ALGO_NAME as RIC_RF_NAME
@@ -23,11 +20,10 @@ from HC2_benchmark import run_hc2_benchmark, ALGO_NAME as HC2_NAME
 from ResNetClassifier_benchmark import run_resnet_benchmark, ALGO_NAME as RESNET_NAME
 from InceptionTimeClassifier_benchmark import run_inception_benchmark, ALGO_NAME as INCEPTION_NAME
 
-# --- Configurazione Globale ---
 UCR_BASE_PATH: str = os.path.join(os.getcwd(), "ucr")
 SEEDS: List[int] = [0, 1, 2]
 
-# Lista dei dataset (puoi decommentare quelli che vuoi far girare stanotte)
+# Lista dei dataset
 DATASET_NAMES: List[str] = [
     "InsectEPGSmallTrain",
     "ItalyPowerDemand",
@@ -53,7 +49,6 @@ ALGORITHMS_TO_RUN = [
 
 all_benchmark_results: List[Dict[str, Any]] = []
 
-
 def load_all_ucr_datasets(dataset_names: List[str], base_path: str) -> Dict[str, Dict[str, Any]]:
     loaded = {}
     
@@ -65,10 +60,8 @@ def load_all_ucr_datasets(dataset_names: List[str], base_path: str) -> Dict[str,
             X_train, y_train = load_from_ucr_tsv_to_dataframe(train_path)
             X_test, y_test = load_from_ucr_tsv_to_dataframe(test_path)
 
-            # --- Z-NORMALIZZAZIONE MANUALE (Instance-wise) ---
+            # Z-NORMALIZZAZIONE (Instance-wise) ---
             def z_normalize_panel(X):
-                # X è un DataFrame sktime (nested: ogni cella è una Series)
-                # Facciamo una copia per evitare problemi di puntatori
                 X_norm = X.copy()
                 for i in range(len(X_norm)):
                     for j in range(len(X_norm.columns)):
@@ -84,7 +77,6 @@ def load_all_ucr_datasets(dataset_names: List[str], base_path: str) -> Dict[str,
 
             X_train = z_normalize_panel(X_train)
             X_test = z_normalize_panel(X_test)
-            # ------------------------------------------------
 
             loaded[name] = {
                 "X_train": X_train, "y_train": y_train,
@@ -98,23 +90,11 @@ def load_all_ucr_datasets(dataset_names: List[str], base_path: str) -> Dict[str,
             print(f" Errore caricamento {name}: {e}")
     return loaded
 
-
+# Chiama la funzione di benchmark appropriata in base al nome dell'algoritmo.
 def run_specific_benchmark(dataset_name: str, data: Dict[str, Any], seed: int, algo_cfg: Dict[str, Any]):
     name = algo_cfg["name"]
     variant = algo_cfg["variant"]
     params = algo_cfg["params"]
-    # --- SILENZIATORE PER IL WORKER PARALLELO ---
-    import sys
-    import os
-    import warnings
-    
-    # Chiude il canale dei messaggi di errore per questo specifico processo
-    #sys.stderr = open(os.devnull, 'w')
-    # Ignora i warning a livello Python
-    #warnings.filterwarnings("ignore")
-    # --------------------------------------------
-
-   # Smistamento degli algoritmi con passaggio parametri
     if name == ROCKET_NAME:
         return run_rocket_benchmark(dataset_name, data, seed, variant, **params)
     elif name == ARSENAL_NAME:
@@ -143,13 +123,12 @@ if __name__ == "__main__":
     all_data = load_all_ucr_datasets(DATASET_NAMES, UCR_BASE_PATH)
 
     all_benchmark_results = []
-    # Definiamo il nome del file CSV per il salvataggio incrementale
     csv_filename = "benchmark_results_SLOWRIC.csv"
-    # --- PULIZIA AUTOMATICA ---
+    # Pulizia automatica
     if os.path.exists(csv_filename):
         print(f"Rilevato vecchio file {csv_filename}. Rimozione in corso per nuova run...")
         os.remove(csv_filename)
-    # --------------------------
+
     # Registra l'ora di inizio assoluta
     start_global = datetime.now()
     print(f"\nAVVIO SESSIONE BENCHMARK: {start_global.strftime('%Y-%m-%d %H:%M:%S')}", flush=True)
@@ -158,7 +137,7 @@ if __name__ == "__main__":
         algo_name = algo_cfg["name"]
         variant_name = algo_cfg["variant"]
 
-        # --- LOGICA SPECIFICA PER HIVE-COTE 2.0 ---
+        #LOGICA SPECIFICA PER HIVE-COTE 2.0
         is_hc2 = (algo_name == HC2_NAME)
 
         algo_start = datetime.now()
@@ -181,36 +160,28 @@ if __name__ == "__main__":
 
             dataset_runs = []
 
-            # Sostituiamo Joblib con un ciclo for standard
+            #Loop sui seed
             for seed in current_seeds:
                 seed_start = datetime.now()
-                # Gestione n_jobs per l'algoritmo
-                # Se Deep Learning (ResNet/Inception), TF gestisce i thread da solo.
-                # Per gli altri, diciamo all'algoritmo di usare tutti i core (-1).
                 if algo_name in [RESNET_NAME, INCEPTION_NAME]:
                     algo_cfg["params"]["n_jobs"] = 1
                 else:
                     algo_cfg["params"]["n_jobs"] = -1
 
-                try: #proteggiamo ogni singolo seed con try catch
-                    # Esecuzione diretta del benchmark per il singolo seed
+                try:
                     res = run_specific_benchmark(dataset_name, data, seed, algo_cfg)
                     dataset_runs.append(res)
 
-                    # 2. SALVATAGGIO INCREMENTALE SUL CSV
+                    # SALVATAGGIO INCREMENTALE SUL CSV
                     df_row = pd.DataFrame([res])
-                    # mode='a' aggiunge la riga; header viene scritto solo se il file non esiste ancora
                     df_row.to_csv(csv_filename, mode='a', index=False, header=not os.path.exists(csv_filename))
 
-                    # Feedback immediato per il seed appena concluso
                     print(f" Seed {res['seed']} | Acc: {res['accuracy']:.4f} | Fit: {res['fit_time']:.2f}s | Pred: {res['predict_time']:.2f}s", flush=True)
 
-                except Exception as e: # <--- Cattura qualsiasi errore (Memoria, Valore, Sistema)
+                except Exception as e:
                     print(f"\n[!!!] ERRORE durante {variant_name} su {dataset_name} (Seed {seed}):", flush=True)
                     print(f"Dettaglio errore: {e}", flush=True)
-                    traceback.print_exc() # Stampa l'errore completo con la riga esatta nel codice
-                    # Non aggiungiamo nulla a dataset_runs, quindi questo seed verrà saltato nel riassunto.
-                    # Il programma NON si ferma, passerà al prossimo seed o dataset.
+                    traceback.print_exc()
                     continue
 
             all_benchmark_results.extend(dataset_runs)
@@ -218,45 +189,39 @@ if __name__ == "__main__":
             ds_end = datetime.now()
             print(f"Tempo Reale Totale per {dataset_name}: {ds_end - ds_start}", flush=True)
             print("-" * 30, flush=True)
-            del dataset_runs # Libera la lista di risultati in memoria
-            gc.collect()     # Forza la pulizia della RAM
+            del dataset_runs
+            gc.collect()
 
         algo_end = datetime.now()
         print(f"\n--- COMPLETATO: {variant_name} ---", flush=True) 
         print(f" Durata Totale Algoritmo: {algo_end - algo_start}", flush=True)
         print("=" * 70, flush=True)
 
-    # --- RIASSUNTO FINALE ---
-    # --- 1. CREAZIONE DATAFRAME TOTALE ---
+    # RIASSUNTO FINALE
     final_df = pd.DataFrame(all_benchmark_results)
 
-    # --- 3. LOGICA DEL RIASSUNTO ---
     metrics_to_agg = ['accuracy', 'f1_score', 'fit_time', 'predict_time', 'total_time_seconds']
 
-    # Invece di drop_duplicates generico, raggruppiamo per dataset 
-    # e prendiamo il valore massimo (o il primo) per ogni metadato.
-    # Questo garantisce UNA riga per dataset.
     metadata_df = final_df.groupby('dataset')[['train_size', 'series_length', 'num_classes']].max()
 
     # Calcoliamo medie e deviazioni standard
     performance_summary = final_df.groupby(['dataset', 'variant'])[metrics_to_agg].agg(['mean', 'std'])
     performance_summary.columns = ['_'.join(col).strip() for col in performance_summary.columns.values]
 
-    # Uniamo: ora il join sarà 1-a-1 per ogni coppia (dataset, variant)
     final_summary_combined = performance_summary.reset_index(level='variant').join(metadata_df)
 
-    # Definiamo l'ordine delle colonne includendo TUTTE le medie e le deviazioni standard
+    # Definiamo l'ordine delle colonne
     STANDARD_ORDER = [
         'variant', 'train_size', 'series_length', 'num_classes',
         'accuracy_mean', 'accuracy_std', 
         'f1_score_mean', 'f1_score_std',
         'fit_time_mean', 'predict_time_mean', 
-        'total_time_seconds_mean', 'total_time_seconds_std' # <--- AGGIUNTA QUI
+        'total_time_seconds_mean', 'total_time_seconds_std'
     ]
     
     final_summary_combined = final_summary_combined.reindex(columns=STANDARD_ORDER)
 
-    # --- 4. STAMPA FINALE ---
+    # STAMPA FINALE
     print("\n" + "#" * 100, flush=True)
     print(" RIASSUNTO GENERALE (Medie e Deviazione Standard sui Seed)", flush=True)
     print("#" * 100, flush=True)

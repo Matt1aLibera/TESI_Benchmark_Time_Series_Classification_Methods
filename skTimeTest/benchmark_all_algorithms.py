@@ -12,7 +12,6 @@ from drCIF_benchmark import run_drcif_benchmark, ALGO_NAME as DRCIF_NAME
 from arsenal_benchmark import run_arsenal_benchmark, ALGO_NAME as ARSENAL_NAME
 from HC2_benchmark import run_hc2_benchmark, ALGO_NAME as HC2_NAME
 
-# --- Configurazione Globale ---
 UCR_BASE_PATH: str = os.path.join(os.getcwd(), "ucr") #percorso al file dei dataet ucr
 SEEDS: List[int] = [0, 1, 2]
 
@@ -37,7 +36,7 @@ DATASET_NAMES: List[str] = [
 loaded_datasets: Dict[str, Dict[str, Any]] = {}
 all_benchmark_results: List[Dict[str, Any]] = []
 
-## Funzione di Caricamento datasets. Carica i dataset UCR locali e calcola Train Size e Series Length.
+# Funzione di Caricamento datasets. Carica i dataset UCR locali e calcola Train Size e Series Length.
 def load_all_ucr_datasets(dataset_names: List[str], base_path: str) -> Dict[str, Dict[str, Any]]:
     print(f"Inizio caricamento dei dataset da: {base_path}")
 
@@ -53,7 +52,7 @@ def load_all_ucr_datasets(dataset_names: List[str], base_path: str) -> Dict[str,
 
             # calcolo metadati
             train_size = X_train.shape[0]
-            # Assumendo serie univariata: X_train.iloc[0, 0] è la Series, .shape[0] è la lunghezza
+
             series_length = X_train.iloc[0, 0].shape[0]
 
             # Salva i dati caricati
@@ -73,7 +72,6 @@ def load_all_ucr_datasets(dataset_names: List[str], base_path: str) -> Dict[str,
 
     return loaded_datasets
 
-# --- funzione per eseguire qualsiasi classificatore ---
 # Chiama la funzione di benchmark appropriata in base al nome dell'algoritmo.
 def run_specific_benchmark(dataset_name: str, data: Dict[str, Any], seed: int, algo_name: str):
     if algo_name == WEASEL_NAME:
@@ -95,7 +93,6 @@ def run_specific_benchmark(dataset_name: str, data: Dict[str, Any], seed: int, a
     else:
         raise ValueError(f"Algoritmo '{algo_name}' non supportato.")
 
-# --- ESECUZIONE PRINCIPALE ---
 
 if __name__ == "__main__":
     # Caricamento di tutti i dati
@@ -135,28 +132,20 @@ if __name__ == "__main__":
             for index, row in summary.iterrows():
                 print(f"  {index.replace('_seconds', '')}: {row['mean']:.4f} ± {row['std']:.4f}")
 
-    # ---  RIASSUNTO FINALE ---
-
+    # stampa dati finale
     final_df = pd.DataFrame(all_benchmark_results)
 
     print("\n" + "#" * 70)
     print(" RIASSUNTO GENERALE (Media e Dev. Standard su tutti i dataset e algoritmi)")
     print("#" * 70)
 
-    # 1. Crea il DataFrame dei Metadati univoci e settalo sull'indice 'dataset'
     metadata_df = final_df[['dataset', 'train_size', 'series_length']].drop_duplicates().set_index('dataset')
-
-    #  Raggruppa i risultati di performance (Indice Multi-Livello: dataset, algorithm)
     performance_summary = final_df.groupby(['dataset', 'algorithm'])[
         ['accuracy', 'f1_score', 'total_time_seconds']].agg(
         ['mean', 'std'])
 
     performance_summary.columns = ['_'.join(col).strip() for col in performance_summary.columns.values]
-
-    #  Resetta l'indice di 'algorithm' per unirlo ai metadati
     performance_summary_reset = performance_summary.reset_index(level='algorithm')
-
-    #  Unisce i metadati al performance summary (join su indice 'dataset')
     final_summary_combined = performance_summary_reset.join(metadata_df)
 
     # 5. Definisci l'ordine standardizzato delle colonne

@@ -12,21 +12,18 @@ def run_rocket_benchmark(dataset_name: str, data: Dict[str, Any], seed: int,
     X_train, y_train = data['X_train'], data['y_train']
     X_test, y_test = data['X_test'], data['y_test']
 
-    # Estrazione iperparametri con valori di default se non specificati
     n_kernels = kwargs.get("num_kernels", 10000)
 
     classifier = Rocket(
         num_kernels=n_kernels,
         random_state=seed,
-        n_jobs=-1 # Parallelizziamo i seed nel main, non qui
+        n_jobs=-1
     )
 
-    # Misura tempo di FIT
     start_fit = time.time()
     classifier.fit(X_train, y_train)
     fit_time = time.time() - start_fit
 
-    # Misura tempo di PREDICT
     start_pred = time.time()
     y_pred = classifier.predict(X_test)
     predict_time = time.time() - start_pred
@@ -36,7 +33,7 @@ def run_rocket_benchmark(dataset_name: str, data: Dict[str, Any], seed: int,
         "algorithm": ALGO_NAME,
         "variant": variant,
         "seed": seed,
-        "hyperparameters": json.dumps(kwargs), # Salva i parametri usati
+        "hyperparameters": json.dumps(kwargs),
         "accuracy": accuracy_score(y_test, y_pred),
         "f1_score": f1_score(y_test, y_pred, average='macro', zero_division=0),
         "fit_time": fit_time,

@@ -14,15 +14,12 @@ def run_stc_benchmark(dataset_name: str, data: Dict[str, Any], seed: int,
     X_train, y_train = data['X_train'], data['y_train']
     X_test, y_test = data['X_test'], data['y_test']
 
-    # Estrazione parametri dalle varianti
-    # Se passiamo un numero di alberi per la Rotation Forest interna
     n_est = kwargs.get("n_estimators", 200) 
     n_samples = kwargs.get("n_shapelet_samples", 10000)
     max_sh = kwargs.get("max_shapelets", 1000)
     time_limit = kwargs.get("time_limit_in_minutes", 120)
 
     # Definiamo l'estimator interno (Rotation Forest)
-    # Se vuoi usare il default assoluto di sktime (molto pesante), metti n_estimators=200
     rotf = RotationForest(
         n_estimators=n_est,
         random_state=seed,
@@ -35,16 +32,14 @@ def run_stc_benchmark(dataset_name: str, data: Dict[str, Any], seed: int,
         max_shapelets=max_sh,
         batch_size=100,
         random_state=seed,
-        n_jobs=-1,  # Parallelismo gestito dal main sui seed
+        n_jobs=-1,
         time_limit_in_minutes= time_limit,
     )
 
-    # Addestramento (Fit)
     start_fit = time.time()
     classifier.fit(X_train, y_train)
     fit_time = time.time() - start_fit
 
-    # Previsione (Predict)
     start_pred = time.time()
     y_pred = classifier.predict(X_test)
     predict_time = time.time() - start_pred
