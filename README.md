@@ -1,4 +1,4 @@
-# 📊 Benchmarking allo Stato dell'Arte per Time Series Classification (TSC)
+# 📊 Benchmarking di algoritmi allo Stato dell'Arte per Time Series Classification (TSC)
 
 🎓 **Tesi di Laurea Triennale**  
 Università degli Studi di Torino  
@@ -42,7 +42,7 @@ Il framework integra ed estende i classificatori della libreria `sktime`, raggru
 - InceptionTime  
 - ResNet  
 
-### 🔗 Ensemble & Hybrid
+### 🔗 Meta-Ensemble
 - HIVE-COTE 2.0  
 
 ### 🔍 Shapelet-based
@@ -162,15 +162,7 @@ Il lavoro completo è disponibile in formato PDF:
 
 ## 🛠️ Come utilizzare il progetto
 
-Questo progetto è stato sviluppato per scopi accademici.
-
-### Requisiti
-
-Assicurati di avere installato:
-
-- `sktime`  
-- `pandas`  
-- `numpy`  
+Questo progetto è stato sviluppato per scopi accademici.  
 
 ### Esecuzione
 
