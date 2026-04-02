@@ -1,5 +1,12 @@
 # 📊 Benchmarking di algoritmi allo Stato dell'Arte per Time Series Classification (TSC)
 
+![Python](https://img.shields.io/badge/python-3670A0?style=for-the-badge&logo=python&logoColor=ffdd54)
+![Sktime](https://img.shields.io/badge/library-sktime-orange?style=for-the-badge)
+![Machine Learning](https://img.shields.io/badge/Machine%20Learning-Target-blue?style=for-the-badge&logo=scikit-learn&logoColor=white)
+![Time Series](https://img.shields.io/badge/Focus-Time%20Series-green?style=for-the-badge)
+![UCR Archive](https://img.shields.io/badge/Data-UCR%20Archive-red?style=for-the-badge)
+![Jupyter](https://img.shields.io/badge/Jupyter-F37626?style=for-the-badge&logo=jupyter&logoColor=white)
+
 🎓 **Tesi di Laurea Triennale**  
 Università degli Studi di Torino  
 Dipartimento di Informatica  
