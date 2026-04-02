@@ -156,7 +156,7 @@ Lo studio evidenzia che **non esiste un classificatore universalmente superiore*
 Il lavoro completo è disponibile in formato PDF:
 
 📄 **Visualizza la Tesi**  
-*(Inserire qui il link al file PDF)*
+📄 **[Elborato di tesi Mattia Liberatore TSC (PDF)](./Tesi_Mattia_Liberatore_Benchmarking_TSC_Methods.pdf)**
 
 ---
 
