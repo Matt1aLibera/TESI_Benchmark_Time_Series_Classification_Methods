@@ -9,6 +9,7 @@
 
 🎓 **Tesi di Laurea Triennale**  
 Università degli Studi di Torino | Dipartimento di Informatica
+
 Sviluppata presso: Software & NC Integration Lab – Centro Nazionale di Ricerca HPC (ICSC) 
 
 **Candidato:** Mattia Liberatore  
