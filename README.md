@@ -8,8 +8,8 @@
 ![Jupyter](https://img.shields.io/badge/Jupyter-F37626?style=for-the-badge&logo=jupyter&logoColor=white)
 
 🎓 **Tesi di Laurea Triennale**  
-Università degli Studi di Torino  
-Dipartimento di Informatica  
+Università degli Studi di Torino | Dipartimento di Informatica
+Sviluppata presso: Software & NC Integration Lab – Centro Nazionale di Ricerca HPC (ICSC) 
 
 **Candidato:** Mattia Liberatore  
 **Ambito:** Machine Learning / Time Series Analysis  
